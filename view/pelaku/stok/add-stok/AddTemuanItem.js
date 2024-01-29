@@ -1,19 +1,19 @@
 import { View, Text, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import Modal from "react-native-modal";
-import { styles } from '../../../assets/styles/style';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import AvoidingWrapper from '../../../assets/styles/avoidingWrapper';
-import { CredentialContext, BaseURL } from '../../../Credentials';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { styles } from '../../../../assets/styles/style';
+import AvoidingWrapper from '../../../../assets/styles/avoidingWrapper';
+import { CredentialContext, BaseURL } from '../../../../Credentials';
 
-export default function AddItem({navigation}) {
+export default function AddTemuanItem({navigation}) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
-  const [itemData, setItemData] = useState([]);
   const [lokasiData, setLokasiData] = useState([]);
   const [warnaData, setWarnaData] = useState([]);
-  const [item, setItem] = useState(null);
+  const [item, onChangeItem] = useState('');
+  const [itemId, setItemId] = useState('');
   const [lokasi, setLokasi] = useState(null);
   const [warna, setWarna] = useState([]);
   const [keterangan, onChangeKeterangan] = useState('');
@@ -58,19 +58,20 @@ export default function AddItem({navigation}) {
 
   function showCalculator() {
     if (csoDetId == "" && csoDet2Id == "") {
-      fetch(`${BaseURL}/tambah-perhitungan`, {
+      fetch(`${BaseURL}/tambah-perhitungan-temuan`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          type: 1,
           username: storedCredentials[0],
           csoid: storedCredentials[3],
-          itemid: item,
+          temuanname: item,
           lokasi: lokasi,
           color: warna,
-          statusItem: 'R'
+          statusItem: "T",
         }),
       })
         .then((response) => response.json())
@@ -78,6 +79,7 @@ export default function AddItem({navigation}) {
           if (responseData['result'] == 1) {
             setCsoDetId(responseData['csodetid']);
             setCsoDet2Id(responseData['csodet2id']);
+            setItemId(responseData['itemid'])
             setModalVisible(!isModalVisible);
           } else {
             Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan tekan tombol "Hitung" ulang', [
@@ -91,19 +93,13 @@ export default function AddItem({navigation}) {
   }
 
   function submitPerhitungan(paramQty, paramInput) {
-    // console.log(`csodet2id: ${csoDet2Id}`);
-    // console.log(`qty: ${paramQty}`);
-    // console.log(`history: ${history}=${paramQty}`);
-    // console.log(`inputs: ${paramInput.join(',')}`);
-    // console.log(`operand: ${input[0]}`);    
-
     fetch(`${BaseURL}/simpan-perhitungan`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
+      body: JSON.stringify({        
         csodet2id: csoDet2Id,
         qty: paramQty,
         history: `${history}=${paramQty}`,
@@ -128,15 +124,15 @@ export default function AddItem({navigation}) {
       })
   }
 
-  function submit() {  
-    fetch(`${BaseURL}/add-item`, {
+  function submit() {
+    fetch(`${BaseURL}/add-temuan-item`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        itemid: item,
+        temuanname: item,
         lokasi: lokasi,
         qtycso: Number(resultCalc),
         color: warna,
@@ -145,37 +141,25 @@ export default function AddItem({navigation}) {
         csoid: storedCredentials[3],
         csodetid: csoDetId,
         csodet2id: csoDet2Id,
-        statusItem: 'R'
+        itemid: itemId
       }),
     })
       .then((response) => response.json())
       .then((responseData) => {
         if (responseData['result'] == 1) {
-          
-          navigation.goBack();
+          navigation.navigate("HomeItem");
         } else {
           Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan lakukan penyimpanan ulang', [
             { text: 'OK' },
           ]);
         }
-      });
+      })
   }
   useEffect(() => {
-    if(itemData.length == 0) {
-      setData(`${BaseURL}/item-list`, "itembatchid", "itemname", setItemData);
-
-    }
-    if(lokasiData.length == 0) {
       setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData);
-
-    } 
-    if(warnaData.length == 0) {
       setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData);
+  }, []);
 
-    }
-     // 
-  },[]);
-  
   return (
     <AvoidingWrapper>
       <View style={styles.styledContainer}>
@@ -396,26 +380,14 @@ export default function AddItem({navigation}) {
           <View style={styles.formGroupLabel}>
             <Text>Item</Text>
           </View>
-          <Dropdown
-            style={styles.formGroupInput}
-            data={itemData}
-            selectedTextProps={{ numberOfLines: 1 }}
-            placeholderStyle={styles.formGroupPlaceHolderStyle}   
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={'--Pilih Item--'}
-            searchPlaceholder="Cari..."
-            value={item}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={item => {
-              setItem(item.value);
-              setIsFocus(false);
-            }}
-
+          <TextInput
+          placeholder='Nama Item'
+          placeholderTextColor={styles.formGroupPlaceHolderStyle}          
+          style={styles.formGroupNamaItem}
+          onChangeText={onChangeItem}
+          value={item}
           />
+          
         </View>
 
         <View style={styles.formGroup}>
@@ -430,7 +402,7 @@ export default function AddItem({navigation}) {
             labelField="label"
             valueField="value"
             placeholder={'--Pilih Lokasi--'}
-            placeholderStyle={styles.formGroupPlaceHolderStyle}   
+            placeholderStyle={styles.formGroupPlaceHolderStyle}            
             searchPlaceholder="Cari..."
             value={lokasi}
             onFocus={() => setIsFocus(true)}
@@ -456,7 +428,7 @@ export default function AddItem({navigation}) {
               labelField="label"
               valueField="label"
               placeholder={'--Pilih Warna--'}
-              placeholderStyle={styles.formGroupPlaceHolderStyle}   
+              placeholderStyle={styles.formGroupPlaceHolderStyle}            
               searchPlaceholder="Cari..."
               value={warna}
               onChange={item => {
@@ -484,9 +456,9 @@ export default function AddItem({navigation}) {
             value={resultCalc}
             editable={input.length == 0}
             onChangeText={handleTextQtyChange}
-            keyboardType='numeric'
             placeholder='Jumlah Item'
             placeholderTextColor={styles.formGroupColorPlaceHorlder}
+            keyboardType='numeric'
           />
           <TouchableOpacity style={styles.formPerhitunganButton} onPress={() => {
             if (item == null)
@@ -513,28 +485,27 @@ export default function AddItem({navigation}) {
           <TextInput
             style={styles.formKeterangan}
             onChangeText={onChangeKeterangan}
-            value={keterangan}
+            value={keterangan}            
           />
         </View>
         <TouchableOpacity style={styles.buttonSubmit} onPress={() => {
-          // if (item == null)
-          //   Alert.alert('Tambah Item Gagal', 'Anda belum memilih item', [
-          //     { text: 'OK' },
-          //   ]);
-          // else if (lokasi == null)
-          //   Alert.alert('Tambah Item Gagal', 'Anda belum memilih lokasi', [
-          //     { text: 'OK' },
-          //   ]);
-          // else if (warna == [])
-          //   Alert.alert('Tambah Item Gagal', 'Anda belum memilih warna', [
-          //     { text: 'OK' },
-          //   ]);
-          // else if (keterangan == '')
-          //   Alert.alert('Peringatan', 'Apakah anda hendak menambahkan item tanpa memberikan keterangan?', [
-          //     { text: 'Iya', onPress: () => submit() }, { text: 'Batal' }
-          //   ]);
-          // else 
-          submit();
+          if (item == null)
+            Alert.alert('Tambah Item Gagal', 'Anda belum memilih item', [
+              { text: 'OK' },
+            ]);
+          else if (lokasi == null)
+            Alert.alert('Tambah Item Gagal', 'Anda belum memilih lokasi', [
+              { text: 'OK' },
+            ]);
+          else if (warna == [])
+            Alert.alert('Tambah Item Gagal', 'Anda belum memilih warna', [
+              { text: 'OK' },
+            ]);
+          else if (keterangan == '')
+            Alert.alert('Peringatan', 'Apakah anda hendak menambahkan item tanpa memberikan keterangan?', [
+              { text: 'Iya', onPress: () => submit() }, { text: 'Batal' }
+            ]);
+          else submit();
         }}>
           <Text style={styles.buttonAccountText}><Ionicons name="save-sharp" size={20} color="white" />   Simpan</Text>
         </TouchableOpacity>

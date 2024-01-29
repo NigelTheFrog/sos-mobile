@@ -43,11 +43,12 @@ export default function LoginScreen({ navigation }) {
                   .then((response) => response.json())
                   .then((responseData) => {
                     if(JSON.stringify(responseData['result']) == 1) {
-                      persistLogin([
+                      persistLogin([                        
                         responseData['username'], 
                         responseData['name'], 
                         responseData['level'],
                         responseData['csoid'], 
+                        responseData['userid'], 
                       ]);
                     } else {
                       Alert.alert('Login Gagal', 'Pastikan Username atau Password anda benar', [

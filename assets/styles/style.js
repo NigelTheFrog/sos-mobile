@@ -108,6 +108,25 @@ export const styles = StyleSheet.create({
             height: 3,
         }
     },
+    cardDetail: {
+        backgroundColor: Colors.primary,
+        marginBottom: 10,
+        marginTop: 20,
+        paddingRight: 20,
+        paddingTop: 10,
+        paddingLeft: 20,
+        shadowColor: Colors.darkLight,
+        borderRadius: 15,
+        width: '98%',
+        height: 97,
+        elevation: 3,
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        shadowOffset: {
+            width: 3,
+            height: 3,
+        }
+    },
     cardContainer: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -222,6 +241,13 @@ export const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
         textAlignVertical: 'top'
+    },
+    formGroupDetailItem: {
+        backgroundColor: Colors.primary,       
+        width: '80%',
+        paddingLeft: 15,
+        fontSize: 15,
+        color: Colors.brand
     },
     formGroupNamaItem: {
         backgroundColor: Colors.primary,       

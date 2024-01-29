@@ -1,20 +1,19 @@
 import { View, Text, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import Modal from "react-native-modal";
-import { styles } from '../../../assets/styles/style';
+import { styles } from '../../../../assets/styles/style';
+import AvoidingWrapper from '../../../../assets/styles/avoidingWrapper';
+import { CredentialContext, BaseURL } from '../../../../Credentials';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import AvoidingWrapper from '../../../assets/styles/avoidingWrapper';
-import { CredentialContext, BaseURL } from '../../../Credentials';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-export default function AddAvalan() {
+export default function AddItem({navigation}) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
-  const [avalanData, setAvalanData] = useState([]);
+  const [itemData, setItemData] = useState([]);
   const [lokasiData, setLokasiData] = useState([]);
   const [warnaData, setWarnaData] = useState([]);
-  const [avalan, setAvalan] = useState(null);
-  const [avalanId, setAvalanId] = useState(null);
+  const [item, setItem] = useState(null);
   const [lokasi, setLokasi] = useState(null);
   const [warna, setWarna] = useState([]);
   const [keterangan, onChangeKeterangan] = useState('');
@@ -35,7 +34,7 @@ export default function AddAvalan() {
     setResultCalc(text);
   }
 
-  function setData(req, valueName, labelName, setVariable, type) {
+  function setData(req, valueName, labelName, setVariable) {
     fetch(req, {
       method: "GET",
       headers: {
@@ -47,23 +46,12 @@ export default function AddAvalan() {
       .then((response) => {
         var count = Object.keys(response['data']).length;
         let arrayData = [];
-        if(type == 1) {
-          for (var i = 0; i < count; i++) {
-            arrayData.push({
-              value: response.data[i][valueName],
-              label: `${ response.data[i]['batchno']} - ${ response.data[i][labelName]}`,
-              id: response.data[i]['batchno']
-            });
-          }
-        } else {
-          for (var i = 0; i < count; i++) {
-            arrayData.push({
-              value: response.data[i][valueName],
-              label: response.data[i][labelName]
-            });
-          }
+        for (var i = 0; i < count; i++) {
+          arrayData.push({
+            value: response.data[i][valueName],
+            label: response.data[i][labelName]
+          });
         }
-        
         setVariable(arrayData);
       });
   }
@@ -79,10 +67,10 @@ export default function AddAvalan() {
         body: JSON.stringify({
           username: storedCredentials[0],
           csoid: storedCredentials[3],
-          itemid: avalan,
+          itemid: item,
           lokasi: lokasi,
           color: warna,
-          statusItem: 'A'
+          statusItem: 'R'
         }),
       })
         .then((response) => response.json())
@@ -103,6 +91,12 @@ export default function AddAvalan() {
   }
 
   function submitPerhitungan(paramQty, paramInput) {
+    // console.log(`csodet2id: ${csoDet2Id}`);
+    // console.log(`qty: ${paramQty}`);
+    // console.log(`history: ${history}=${paramQty}`);
+    // console.log(`inputs: ${paramInput.join(',')}`);
+    // console.log(`operand: ${input[0]}`);    
+
     fetch(`${BaseURL}/simpan-perhitungan`, {
       method: "POST",
       headers: {
@@ -142,8 +136,7 @@ export default function AddAvalan() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        itemid: avalan,
-        batchno: avalanId,
+        itemid: item,
         lokasi: lokasi,
         qtycso: Number(resultCalc),
         color: warna,
@@ -152,34 +145,26 @@ export default function AddAvalan() {
         csoid: storedCredentials[3],
         csodetid: csoDetId,
         csodet2id: csoDet2Id,
-        statusItem: 'A'
+        statusItem: 'R'
       }),
     })
       .then((response) => response.json())
       .then((responseData) => {
         if (responseData['result'] == 1) {
-          // navigation.goBack();
+          navigation.navigate("HomeItem");
         } else {
           Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan lakukan penyimpanan ulang', [
             { text: 'OK' },
           ]);
         }
-      })
+      });
   }
   useEffect(() => {
-    if(avalanData.length == 0) {
-      setData(`${BaseURL}/avalan-list`, "itemid", "itemname", setAvalanData, 1);
-
-    }
-    if(lokasiData.length == 0) {
-      setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData, 0);
-
-    } 
-    if(warnaData.length == 0) {
-      setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData, 0);
-    }
-  }, []);
-
+      setData(`${BaseURL}/item-list`, "itembatchid", "itemname", setItemData);
+      setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData);
+      setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData);
+  },[]);
+  
   return (
     <AvoidingWrapper>
       <View style={styles.styledContainer}>
@@ -398,25 +383,24 @@ export default function AddAvalan() {
         </Modal>
         <View style={styles.formGroup}>
           <View style={styles.formGroupLabel}>
-            <Text>Avalan</Text>
+            <Text>Item</Text>
           </View>
           <Dropdown
             style={styles.formGroupInput}
-            data={avalanData}
+            data={itemData}
             selectedTextProps={{ numberOfLines: 1 }}
             placeholderStyle={styles.formGroupPlaceHolderStyle}   
             search
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={'--Pilih Avalan--'}
+            placeholder={'--Pilih Item--'}
             searchPlaceholder="Cari..."
-            value={avalan}
+            value={item}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => {
-              setAvalan(item.value);
-              setAvalanId(item.id);
+              setItem(item.value);
               setIsFocus(false);
             }}
 
@@ -494,8 +478,8 @@ export default function AddAvalan() {
             placeholderTextColor={styles.formGroupColorPlaceHorlder}
           />
           <TouchableOpacity style={styles.formPerhitunganButton} onPress={() => {
-            if (avalan == null)
-              Alert.alert('Proses Gagal', 'Anda belum memilih avalan', [
+            if (item == null)
+              Alert.alert('Proses Gagal', 'Anda belum memilih item', [
                 { text: 'OK' },
               ]);
             else if (lokasi == null)
@@ -522,23 +506,24 @@ export default function AddAvalan() {
           />
         </View>
         <TouchableOpacity style={styles.buttonSubmit} onPress={() => {
-          if (avalan == null)
-            Alert.alert('Tambah Avalan Gagal', 'Anda belum memilih avalan', [
+          if (item == null)
+            Alert.alert('Tambah Item Gagal', 'Anda belum memilih item', [
               { text: 'OK' },
             ]);
           else if (lokasi == null)
-            Alert.alert('Tambah Avalan Gagal', 'Anda belum memilih lokasi', [
+            Alert.alert('Tambah Item Gagal', 'Anda belum memilih lokasi', [
               { text: 'OK' },
             ]);
           else if (warna == [])
-            Alert.alert('Tambah Avalan Gagal', 'Anda belum memilih warna', [
+            Alert.alert('Tambah Item Gagal', 'Anda belum memilih warna', [
               { text: 'OK' },
             ]);
           else if (keterangan == '')
-            Alert.alert('Peringatan', 'Apakah anda hendak menambahkan avalan tanpa memberikan keterangan?', [
+            Alert.alert('Peringatan', 'Apakah anda hendak menambahkan item tanpa memberikan keterangan?', [
               { text: 'Iya', onPress: () => submit() }, { text: 'Batal' }
             ]);
-          else submit();
+          else 
+          submit();
         }}>
           <Text style={styles.buttonAccountText}><Ionicons name="save-sharp" size={20} color="white" />   Simpan</Text>
         </TouchableOpacity>

@@ -1,19 +1,20 @@
 import { View, Text, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import Modal from "react-native-modal";
-import { Colors, styles } from '../../../assets/styles/style';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import AvoidingWrapper from '../../../assets/styles/avoidingWrapper';
-import { CredentialContext, BaseURL } from '../../../Credentials';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { styles } from '../../../../assets/styles/style';
+import AvoidingWrapper from '../../../../assets/styles/avoidingWrapper';
+import { CredentialContext, BaseURL } from '../../../../Credentials';
 
-
-export default function AddTemuanItem() {
+export default function AddAvalan({navigation}) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
+  const [avalanData, setAvalanData] = useState([]);
   const [lokasiData, setLokasiData] = useState([]);
   const [warnaData, setWarnaData] = useState([]);
-  const [item, onChangeItem] = useState('');
+  const [avalan, setAvalan] = useState(null);
+  const [avalanId, setAvalanId] = useState(null);
   const [lokasi, setLokasi] = useState(null);
   const [warna, setWarna] = useState([]);
   const [keterangan, onChangeKeterangan] = useState('');
@@ -34,7 +35,7 @@ export default function AddTemuanItem() {
     setResultCalc(text);
   }
 
-  function setData(req, valueName, labelName, setVariable) {
+  function setData(req, valueName, labelName, setVariable, type) {
     fetch(req, {
       method: "GET",
       headers: {
@@ -46,12 +47,23 @@ export default function AddTemuanItem() {
       .then((response) => {
         var count = Object.keys(response['data']).length;
         let arrayData = [];
-        for (var i = 0; i < count; i++) {
-          arrayData.push({
-            value: response.data[i][valueName],
-            label: response.data[i][labelName]
-          });
+        if (type == 1) {
+          for (var i = 0; i < count; i++) {
+            arrayData.push({
+              value: response.data[i][valueName],
+              label: `${response.data[i]['batchno']} - ${response.data[i][labelName]}`,
+              id: response.data[i]['batchno']
+            });
+          }
+        } else {
+          for (var i = 0; i < count; i++) {
+            arrayData.push({
+              value: response.data[i][valueName],
+              label: response.data[i][labelName]
+            });
+          }
         }
+
         setVariable(arrayData);
       });
   }
@@ -67,9 +79,10 @@ export default function AddTemuanItem() {
         body: JSON.stringify({
           username: storedCredentials[0],
           csoid: storedCredentials[3],
-          itemid: item,
+          itemid: avalan,
           lokasi: lokasi,
           color: warna,
+          statusItem: 'A'
         }),
       })
         .then((response) => response.json())
@@ -129,7 +142,8 @@ export default function AddTemuanItem() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        itemid: item,
+        itemid: avalan,
+        batchno: avalanId,
         lokasi: lokasi,
         qtycso: Number(resultCalc),
         color: warna,
@@ -137,13 +151,14 @@ export default function AddTemuanItem() {
         username: storedCredentials[0],
         csoid: storedCredentials[3],
         csodetid: csoDetId,
-        csodet2id: csoDet2Id
+        csodet2id: csoDet2Id,
+        statusItem: 'A'
       }),
     })
       .then((response) => response.json())
       .then((responseData) => {
         if (responseData['result'] == 1) {
-          navigation.goBack();
+          navigation.navigate("HomeItem");
         } else {
           Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan lakukan penyimpanan ulang', [
             { text: 'OK' },
@@ -152,13 +167,9 @@ export default function AddTemuanItem() {
       })
   }
   useEffect(() => {
-    if(lokasiData.length == 0) {
-      setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData);
-
-    } 
-    if(warnaData.length == 0) {
-      setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData);
-    }
+    setData(`${BaseURL}/avalan-list`, "itemid", "itemname", setAvalanData, 1);
+    setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData, 0);
+    setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData, 0);
   }, []);
 
   return (
@@ -379,16 +390,29 @@ export default function AddTemuanItem() {
         </Modal>
         <View style={styles.formGroup}>
           <View style={styles.formGroupLabel}>
-            <Text>Item</Text>
+            <Text>Avalan</Text>
           </View>
-          <TextInput
-          placeholder='Nama Item'
-          placeholderTextColor={styles.formGroupPlaceHolderStyle}          
-          style={styles.formGroupNamaItem}
-          onChangeText={onChangeItem}
-          value={item}
+          <Dropdown
+            style={styles.formGroupInput}
+            data={avalanData}
+            selectedTextProps={{ numberOfLines: 1 }}
+            placeholderStyle={styles.formGroupPlaceHolderStyle}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={'--Pilih Avalan--'}
+            searchPlaceholder="Cari..."
+            value={avalan}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setAvalan(item.value);
+              setAvalanId(item.id);
+              setIsFocus(false);
+            }}
+
           />
-          
         </View>
 
         <View style={styles.formGroup}>
@@ -403,7 +427,7 @@ export default function AddTemuanItem() {
             labelField="label"
             valueField="value"
             placeholder={'--Pilih Lokasi--'}
-            placeholderStyle={styles.formGroupPlaceHolderStyle}            
+            placeholderStyle={styles.formGroupPlaceHolderStyle}
             searchPlaceholder="Cari..."
             value={lokasi}
             onFocus={() => setIsFocus(true)}
@@ -416,7 +440,7 @@ export default function AddTemuanItem() {
           />
         </View>
 
-        <View style={[warna.length === 0 ? styles.formGroupColorNull: styles.formGroupColorFilled]}>
+        <View style={[warna.length === 0 ? styles.formGroupColorNull : styles.formGroupColorFilled]}>
           <View style={styles.formGroupColorLabel}>
             <Text>Kode Cat</Text>
           </View>
@@ -429,7 +453,7 @@ export default function AddTemuanItem() {
               labelField="label"
               valueField="label"
               placeholder={'--Pilih Warna--'}
-              placeholderStyle={styles.formGroupPlaceHolderStyle}            
+              placeholderStyle={styles.formGroupPlaceHolderStyle}
               searchPlaceholder="Cari..."
               value={warna}
               onChange={item => {
@@ -457,13 +481,13 @@ export default function AddTemuanItem() {
             value={resultCalc}
             editable={input.length == 0}
             onChangeText={handleTextQtyChange}
+            keyboardType='numeric'
             placeholder='Jumlah Item'
             placeholderTextColor={styles.formGroupColorPlaceHorlder}
-            keyboardType='numeric'
           />
           <TouchableOpacity style={styles.formPerhitunganButton} onPress={() => {
-            if (item == null)
-              Alert.alert('Proses Gagal', 'Anda belum memilih item', [
+            if (avalan == null)
+              Alert.alert('Proses Gagal', 'Anda belum memilih avalan', [
                 { text: 'OK' },
               ]);
             else if (lokasi == null)
@@ -486,24 +510,24 @@ export default function AddTemuanItem() {
           <TextInput
             style={styles.formKeterangan}
             onChangeText={onChangeKeterangan}
-            value={keterangan}            
+            value={keterangan}
           />
         </View>
         <TouchableOpacity style={styles.buttonSubmit} onPress={() => {
-          if (item == null)
-            Alert.alert('Tambah Item Gagal', 'Anda belum memilih item', [
+          if (avalan == null)
+            Alert.alert('Tambah Avalan Gagal', 'Anda belum memilih avalan', [
               { text: 'OK' },
             ]);
           else if (lokasi == null)
-            Alert.alert('Tambah Item Gagal', 'Anda belum memilih lokasi', [
+            Alert.alert('Tambah Avalan Gagal', 'Anda belum memilih lokasi', [
               { text: 'OK' },
             ]);
           else if (warna == [])
-            Alert.alert('Tambah Item Gagal', 'Anda belum memilih warna', [
+            Alert.alert('Tambah Avalan Gagal', 'Anda belum memilih warna', [
               { text: 'OK' },
             ]);
           else if (keterangan == '')
-            Alert.alert('Peringatan', 'Apakah anda hendak menambahkan item tanpa memberikan keterangan?', [
+            Alert.alert('Peringatan', 'Apakah anda hendak menambahkan avalan tanpa memberikan keterangan?', [
               { text: 'Iya', onPress: () => submit() }, { text: 'Batal' }
             ]);
           else submit();

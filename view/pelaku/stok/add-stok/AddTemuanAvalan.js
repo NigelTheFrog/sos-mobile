@@ -1,18 +1,19 @@
 import { View, Text, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import Modal from "react-native-modal";
-import { Colors, styles } from '../../../assets/styles/style';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import AvoidingWrapper from '../../../assets/styles/avoidingWrapper';
-import { CredentialContext, BaseURL } from '../../../Credentials';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import {  styles } from '../../../../assets/styles/style';
+import AvoidingWrapper from '../../../../assets/styles/avoidingWrapper';
+import { CredentialContext, BaseURL } from '../../../../Credentials';
 
-export default function AddTemuanAvalan() {
+export default function AddTemuanAvalan({navigation}) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
   const [lokasiData, setLokasiData] = useState([]);
   const [warnaData, setWarnaData] = useState([]);
   const [item, onChangeItem] = useState('');
+  const [itemId, setItemId] = useState('');
   const [lokasi, setLokasi] = useState(null);
   const [warna, setWarna] = useState([]);
   const [keterangan, onChangeKeterangan] = useState('');
@@ -57,18 +58,20 @@ export default function AddTemuanAvalan() {
 
   function showCalculator() {
     if (csoDetId == "" && csoDet2Id == "") {
-      fetch(`${BaseURL}/tambah-perhitungan`, {
+      fetch(`${BaseURL}/tambah-perhitungan-temuan`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          type: 2,
           username: storedCredentials[0],
           csoid: storedCredentials[3],
-          itemid: item,
+          temuanname: item,
           lokasi: lokasi,
           color: warna,
+          statusItem: "T",
         }),
       })
         .then((response) => response.json())
@@ -76,6 +79,7 @@ export default function AddTemuanAvalan() {
           if (responseData['result'] == 1) {
             setCsoDetId(responseData['csodetid']);
             setCsoDet2Id(responseData['csodet2id']);
+            setItemId(responseData['itemid'])
             setModalVisible(!isModalVisible);
           } else {
             Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan tekan tombol "Hitung" ulang', [
@@ -96,6 +100,7 @@ export default function AddTemuanAvalan() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        
         csodet2id: csoDet2Id,
         qty: paramQty,
         history: `${history}=${paramQty}`,
@@ -121,14 +126,14 @@ export default function AddTemuanAvalan() {
   }
 
   function submit() {
-    fetch(`${BaseURL}/add-item`, {
+    fetch(`${BaseURL}/add-temuan-avalan`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        itemid: item,
+        temuanname: item,
         lokasi: lokasi,
         qtycso: Number(resultCalc),
         color: warna,
@@ -136,13 +141,14 @@ export default function AddTemuanAvalan() {
         username: storedCredentials[0],
         csoid: storedCredentials[3],
         csodetid: csoDetId,
-        csodet2id: csoDet2Id
+        csodet2id: csoDet2Id,
+        itemid: itemId
       }),
     })
       .then((response) => response.json())
       .then((responseData) => {
         if (responseData['result'] == 1) {
-          navigation.goBack();
+          navigation.navigate("HomeItem");
         } else {
           Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan lakukan penyimpanan ulang', [
             { text: 'OK' },
@@ -151,12 +157,8 @@ export default function AddTemuanAvalan() {
       })
   }
   useEffect(() => {
-    if(lokasiData.length == 0) {
       setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData);
-    } 
-    if(warnaData.length == 0) {
       setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData);
-    }
   }, []);
 
   return (
@@ -377,10 +379,10 @@ export default function AddTemuanAvalan() {
         </Modal>
         <View style={styles.formGroup}>
           <View style={styles.formGroupLabel}>
-            <Text>Item</Text>
+            <Text>Avalan</Text>
           </View>
           <TextInput
-          placeholder='Nama Item'
+          placeholder='Nama Avalan'
           placeholderTextColor={styles.formGroupPlaceHolderStyle}          
           style={styles.formGroupNamaItem}
           onChangeText={onChangeItem}
@@ -460,8 +462,8 @@ export default function AddTemuanAvalan() {
             keyboardType='numeric'
           />
           <TouchableOpacity style={styles.formPerhitunganButton} onPress={() => {
-            if (item == null)
-              Alert.alert('Proses Gagal', 'Anda belum memilih item', [
+            if (item == "")
+              Alert.alert('Proses Gagal', 'Anda belum mengisi temuan', [
                 { text: 'OK' },
               ]);
             else if (lokasi == null)
@@ -513,5 +515,5 @@ export default function AddTemuanAvalan() {
         </TouchableOpacity>
       </View>
     </AvoidingWrapper>
-  );
+  )
 }
