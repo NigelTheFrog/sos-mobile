@@ -47,8 +47,11 @@ export default function LoginScreen({ navigation }) {
                         responseData['username'], 
                         responseData['name'], 
                         responseData['level'],
-                        responseData['csoid'], 
+                        responseData['csoiditem'], 
                         responseData['userid'], 
+                        responseData['csoidavalan'], 
+                        responseData['trsiditem'], 
+                        responseData['trsidavalan'], 
                       ]);
                     } else {
                       Alert.alert('Login Gagal', 'Pastikan Username atau Password anda benar', [

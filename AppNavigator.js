@@ -14,6 +14,7 @@ import HomeScreenAnalisator from './view/analisator/HomeScreenAnalisator';
 import DetailItemAnalisator from './view/analisator/detail-item/DetailItemAnalisator';
 import HomeScreenPelaku from './view/pelaku/HomeScreenPelaku';
 import TambahAvalan from './view/pelaku/penambahan/TambahAvalan';
+import DetailAvalanAnalisator from './view/analisator/detail-item/DetailAvalanAnalisator';
 
 
 const Stack = createNativeStackNavigator();
@@ -63,6 +64,8 @@ export default function AppNavigator() {
                         <Stack.Screen name='TambahAvalan' component={TambahAvalan} options={{ headerTitle: "Tambah Avalan", }} />
                         <Stack.Screen name='DetailItem' component={DetailItem} options={{ headerTitle: "Detail Item", }} />
                         <Stack.Screen name='DetailItemAnalisator' component={DetailItemAnalisator} options={{ headerTitle: "Detail Item", }} />
+                        <Stack.Screen name='DetailAvalanAnalisator' component={DetailAvalanAnalisator} options={{ headerTitle: "Detail Avalan", }} />
+
                     </Stack.Navigator>
                 </NavigationContainer>
             )}

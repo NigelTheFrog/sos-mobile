@@ -7,17 +7,21 @@ import AvoidingWrapper from '../../../assets/styles/avoidingWrapper';
 import { CredentialContext, BaseURL } from '../../../Credentials';
 
 export default function DetailAvalanAnalisator({ route, navigation }) {
-    const { itemname, itemid, batchno, onhand, selisih, koreksi, deviasi, groupname } = route.params;
+    const { 
+        itemname, itemid, batchno, onhand, selisih, 
+        koreksi, deviasi, groupname, qty, 
+        paramHistory, paramInput, paramCsoId, paramCsoDet2Id 
+    } = route.params;
     const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
     const [item, setItem] = useState(itemid);
     const [itemName, setItemName] = useState(itemname);
     const [groupName, setGroupName] = useState(groupname);
 
-    const [history, setHistory] = useState('');
+    const [history, setHistory] = useState(paramHistory);
     const [displayInput, setDisplayInput] = useState('');
     const [tempInput, setTempInput] = useState('');
-    const [input, setInput] = useState([]);
-    const [resultCalc, setResultCalc] = useState('');
+    const [input, setInput] = useState(paramInput);
+    const [resultCalc, setResultCalc] = useState(qty);
 
     const [resultDeviasi, setResultDeviasi] = useState(deviasi);
     const [resultKoreksi, setResultKoreksi] = useState(koreksi);
@@ -26,40 +30,9 @@ export default function DetailAvalanAnalisator({ route, navigation }) {
     const [isFocus, setIsFocus] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
 
-    const [csoDetId, setCsoDetId] = useState('');
-    const [csoDet2Id, setCsoDet2Id] = useState('');
+    const [csoDetId, setCsoDetId] = useState(paramCsoId);
+    const [csoDet2Id, setCsoDet2Id] = useState(paramCsoDet2Id);
 
-
-    function showCalculator() {
-        if (csoDetId == "" && csoDet2Id == "") {
-            fetch(`${BaseURL}/tambah-perhitungan-item-analisator`, {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    username: storedCredentials[0],
-                    csoid: storedCredentials[3],
-                    itemid: item,
-                }),
-            })
-                .then((response) => response.json())
-                .then((responseData) => {
-                    if (responseData['result'] == 1) {
-                        setCsoDetId(responseData['csodetid']);
-                        setCsoDet2Id(responseData['csodet2id']);
-                        setModalVisible(!isModalVisible);
-                    } else {
-                        Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan tekan tombol "Hitung" ulang', [
-                            { text: 'OK' },
-                        ]);
-                    }
-                })
-        } else {
-            setModalVisible(!isModalVisible)
-        }
-    }
 
     function submitPerhitungan(paramQty, paramInput) {
         fetch(`${BaseURL}/update-perhitungan-item-analisator`, {
@@ -94,7 +67,7 @@ export default function DetailAvalanAnalisator({ route, navigation }) {
     }
 
     function submit() {
-        fetch(`${BaseURL}/update-avalan-analisator`, {
+        fetch(`${BaseURL}/update-item-analisator`, {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -104,12 +77,14 @@ export default function DetailAvalanAnalisator({ route, navigation }) {
                 username: storedCredentials[0],
                 csoid: storedCredentials[3],
                 itemid: item,
+                batchno: batchno,
                 qtycso: Number(resultCalc),
                 csodetid: csoDetId,
                 csodet2id: csoDet2Id,
                 koreksi: resultKoreksi,
                 deviasi: resultDeviasi,
                 analisatorid: storedCredentials[4],
+                statusitem: 'A'
             }),
         })
             .then((response) => response.json())

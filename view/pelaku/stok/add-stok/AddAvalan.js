@@ -78,7 +78,7 @@ export default function AddAvalan({navigation}) {
         },
         body: JSON.stringify({
           username: storedCredentials[0],
-          csoid: storedCredentials[3],
+          csoid: storedCredentials[7],
           itemid: avalan,
           lokasi: lokasi,
           color: warna,
@@ -149,7 +149,7 @@ export default function AddAvalan({navigation}) {
         color: warna,
         remark: keterangan,
         username: storedCredentials[0],
-        csoid: storedCredentials[3],
+        csoid: storedCredentials[7],
         csodetid: csoDetId,
         csodet2id: csoDet2Id,
         statusItem: 'A'

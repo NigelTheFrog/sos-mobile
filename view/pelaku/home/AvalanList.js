@@ -5,63 +5,141 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CredentialContext, BaseURL } from '../../../Credentials';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function AvalanList({navigation}) {
-    const { storedCredentials, setStoredCredentials } = React.useContext(CredentialContext);
-    const [listData, setListData] = React.useState([]);
-    const [isInterval, setIsInterval] = React.useState(true);
-  
-    function SubmitItem() {
-      fetch(`${BaseURL}/submit-item`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          csoid: storedCredentials[3],
-        }),
-  
+export default function AvalanList({ navigation }) {
+  const { storedCredentials, setStoredCredentials } = React.useContext(CredentialContext);
+  const [listData, setListData] = React.useState([]);
+  const [trsId, setTrsId] = React.useState(0);
+  const [csoActive, setCsoActive] = React.useState(false);
+
+  function startCSO() {
+    fetch(`${BaseURL}/mulai-cso-avalan`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: storedCredentials[0],
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (responseData['result'] == 1) {
+          let storedData = [
+            storedCredentials[0],
+            storedCredentials[1],
+            storedCredentials[2],
+            storedCredentials[3],
+            storedCredentials[4],
+            responseData['csoid'],
+            storedCredentials[6],
+            responseData['trsid']
+          ];
+          AsyncStorage.setItem('sosCredentials', JSON.stringify(storedData))
+            .then(() => {
+              setStoredCredentials(storedData);
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+        } else {
+          Alert.alert('Start CSO Gagal', 'Harap lakukan CSO', [
+            { text: 'OK' },
+          ]);
+        }
       })
-        .then((response) => response.json())
-        .then((responseData) => {
-          let arrayData = [];
-          for (var i = 0; i < Object.keys(responseData['data']).length; i++) {
-            arrayData.push(responseData['data']);
-          }
-          setListData(responseData['data']);
-        });
-    }
-  
-    const displayData = () => {
-      fetch(`${BaseURL}/daftar-avalan`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: storedCredentials[0],
-          csoid: storedCredentials[3],
-        }),
-  
-      })
-        .then((response) => response.json())
-        .then((responseData) => {
-          setListData(responseData['data']);        
-        });
-    }
-  
-    React.useEffect(() => {
-      displayData();
-      // let interval;
-      // if (storedCredentials[3] != "") {
-      //   const interval = setInterval(displayData,1000);
-      //   return () => clearInterval(interval);
-      // }
-      // 
-    }, []);
-  
-    
+  }
+
+  function SubmitItem() {
+    fetch(`${BaseURL}/submit-item`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        csoid: storedCredentials[3],
+      }),
+
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        let arrayData = [];
+        for (var i = 0; i < Object.keys(responseData['data']).length; i++) {
+          arrayData.push(responseData['data']);
+        }
+        setListData(responseData['data']);
+      });
+  }
+
+  const displayData = () => {
+    fetch(`${BaseURL}/daftar-avalan`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: storedCredentials[0],
+        csoid: storedCredentials[5],
+      }),
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        setListData(responseData['data']);
+      });
+  }
+
+  function checkCsoActive() {
+    fetch(`${BaseURL}/check-status-cso-avalan`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (responseData['result'] == 1) {
+          setCsoActive(true);
+          setTrsId(responseData['trsid'])
+        }
+        else setCsoActive(false)
+      });
+  }
+
+  React.useEffect(() => {
+    const interval1 = setInterval(checkCsoActive, 1000);
+    const interval2 = setInterval(displayData, 3000);
+
+    return () => {
+      clearInterval(interval1);
+      clearInterval(interval2);
+    };
+  }, []);
+
+  if (csoActive == false) {
+    return (
+      <View style={styles.styledContainerMulaiCSO}>
+        <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>
+          Tidak ada CSO Aktif, silahkan tunggu admin memulai CSO terlebih dahulu
+        </Text>
+      </View>
+    )
+  } else {
+    if (storedCredentials[5] == 0 || storedCredentials[7] != trsId) {
+      return (
+        <View style={styles.styledContainerMulaiCSO}>
+          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+            Silahkan memulai CSO terlebih dahulu
+          </Text>
+          <TouchableOpacity style={styles.buttonMulaiCSO} onPress={startCSO}>
+            <Text style={styles.buttonAccountText}>Mulai CSO</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    } else {
       return (
         <View style={styles.styledContainer}>
           <TouchableOpacity style={styles.buttonTambahItem} onPress={() => {
@@ -72,7 +150,7 @@ export default function AvalanList({navigation}) {
           <ScrollView>
             <View style={styles.cardContainer}>
               {
-                listData ? listData.map((item) =>
+                listData.length > 0 ? listData.map((item) =>
                   <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("DetailItem", {
                     csodetid: item.csodetid,
                     csodet2id: item.csodet2id,
@@ -107,8 +185,8 @@ export default function AvalanList({navigation}) {
                         <Text style={{ fontWeight: 'bold' }}>{item.qty} {item.uom}</Text>
                       </View>
                     </View>
-                  </TouchableOpacity> 
-  
+                  </TouchableOpacity>
+
                 ) :
                   <View style={styles.styledContainerMulaiCSO}>
                     <Text style={{ fontWeight: 'bold', fontSize: 16, textAlign: 'center' }}>
@@ -123,5 +201,7 @@ export default function AvalanList({navigation}) {
           </TouchableOpacity>
         </View>
       )
-    
+    }
+  }
+
 }

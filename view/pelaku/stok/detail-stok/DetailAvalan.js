@@ -107,7 +107,7 @@ export default function DetailItem({ route, navigation }) {
                     color: warna,
                     remark: keterangan,
                     username: storedCredentials[0],
-                    csoid: storedCredentials[3],
+                    csoid: storedCredentials[7],
                     csodetid: csoDetId,
                     csodet2id: csoDet2Id,
                     statusItem: itemType
@@ -139,7 +139,7 @@ export default function DetailItem({ route, navigation }) {
                     color: warna,
                     remark: keterangan,
                     username: storedCredentials[0],
-                    csoid: storedCredentials[3],
+                    csoid: storedCredentials[7],
                     csodetid: csoDetId,
                     csodet2id: csoDet2Id,
                     statusItem: itemType

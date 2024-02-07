@@ -67,7 +67,7 @@ export default function AddTemuanAvalan({navigation}) {
         body: JSON.stringify({
           type: 2,
           username: storedCredentials[0],
-          csoid: storedCredentials[3],
+          csoid: storedCredentials[7],
           temuanname: item,
           lokasi: lokasi,
           color: warna,
@@ -139,7 +139,7 @@ export default function AddTemuanAvalan({navigation}) {
         color: warna,
         remark: keterangan,
         username: storedCredentials[0],
-        csoid: storedCredentials[3],
+        csoid: storedCredentials[7],
         csodetid: csoDetId,
         csodet2id: csoDet2Id,
         itemid: itemId
