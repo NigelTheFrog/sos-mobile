@@ -10,6 +10,7 @@ import { styles } from './assets/styles/style';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DetailItem from './view/pelaku/stok/detail-stok/DetailItem';
+import DetailAvalan from './view/pelaku/stok/detail-stok/DetailAvalan';
 import HomeScreenAnalisator from './view/analisator/HomeScreenAnalisator';
 import DetailItemAnalisator from './view/analisator/detail-item/DetailItemAnalisator';
 import HomeScreenPelaku from './view/pelaku/HomeScreenPelaku';
@@ -63,6 +64,7 @@ export default function AppNavigator() {
                         <Stack.Screen name='TambahItem' component={TambahItem} options={{ headerTitle: "Tambah Item", }} />
                         <Stack.Screen name='TambahAvalan' component={TambahAvalan} options={{ headerTitle: "Tambah Avalan", }} />
                         <Stack.Screen name='DetailItem' component={DetailItem} options={{ headerTitle: "Detail Item", }} />
+                        <Stack.Screen name='DetailAvalan' component={DetailAvalan} options={{ headerTitle: "Detail Avalan", }} />
                         <Stack.Screen name='DetailItemAnalisator' component={DetailItemAnalisator} options={{ headerTitle: "Detail Item", }} />
                         <Stack.Screen name='DetailAvalanAnalisator' component={DetailAvalanAnalisator} options={{ headerTitle: "Detail Avalan", }} />
 

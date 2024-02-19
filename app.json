@@ -19,12 +19,19 @@
     },
     "android": {
       "adaptiveIcon": {
+        "package": "com.sutindo.my-app",
         "foregroundImage": "./assets/image/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.nigelthefrog.myapp"
     },
     "web": {
       "favicon": "./assets/image/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ec22f5ba-477e-446e-bcf1-4b64f329c572"
+      }
     }
   }
 }

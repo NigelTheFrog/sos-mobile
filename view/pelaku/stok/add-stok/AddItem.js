@@ -14,6 +14,7 @@ export default function AddItem({navigation}) {
   const [lokasiData, setLokasiData] = useState([]);
   const [warnaData, setWarnaData] = useState([]);
   const [item, setItem] = useState(null);
+  const [itemBatchId, setItemBatchId] = useState(null);
   const [lokasi, setLokasi] = useState(null);
   const [warna, setWarna] = useState([]);
   const [keterangan, onChangeKeterangan] = useState('');
@@ -34,7 +35,7 @@ export default function AddItem({navigation}) {
     setResultCalc(text);
   }
 
-  function setData(req, valueName, labelName, setVariable) {
+  function setData(req, valueName, labelName, setVariable, type) {
     fetch(req, {
       method: "GET",
       headers: {
@@ -46,11 +47,30 @@ export default function AddItem({navigation}) {
       .then((response) => {
         var count = Object.keys(response['data']).length;
         let arrayData = [];
-        for (var i = 0; i < count; i++) {
-          arrayData.push({
-            value: response.data[i][valueName],
-            label: response.data[i][labelName]
-          });
+        if (type == 1) {
+          for (var i = 0; i < count; i++) {
+            if(response.data[i]['batchno'] == null) {
+              arrayData.push({
+                value: response.data[i][valueName],
+                label: response.data[i][labelName],
+                id: response.data[i]['itembatchid']
+              });
+            } else {
+              arrayData.push({
+                value: response.data[i][valueName],
+                label: `${response.data[i][labelName]} - ${response.data[i]['batchno']}`,
+                id: response.data[i]['itembatchid']
+              });
+            }
+            
+          }
+        } else {
+          for (var i = 0; i < count; i++) {
+            arrayData.push({
+              value: response.data[i][valueName],
+              label: response.data[i][labelName]
+            });
+          }
         }
         setVariable(arrayData);
       });
@@ -68,6 +88,7 @@ export default function AddItem({navigation}) {
           username: storedCredentials[0],
           csoid: storedCredentials[3],
           itemid: item,
+          itembatchid: itemBatchId,
           lokasi: lokasi,
           color: warna,
           statusItem: 'R'
@@ -90,12 +111,7 @@ export default function AddItem({navigation}) {
     }
   }
 
-  function submitPerhitungan(paramQty, paramInput) {
-    // console.log(`csodet2id: ${csoDet2Id}`);
-    // console.log(`qty: ${paramQty}`);
-    // console.log(`history: ${history}=${paramQty}`);
-    // console.log(`inputs: ${paramInput.join(',')}`);
-    // console.log(`operand: ${input[0]}`);    
+  function submitPerhitungan(paramQty, paramInput) {   
 
     fetch(`${BaseURL}/simpan-perhitungan`, {
       method: "POST",
@@ -137,6 +153,7 @@ export default function AddItem({navigation}) {
       },
       body: JSON.stringify({
         itemid: item,
+        itembatchid: itemBatchId,
         lokasi: lokasi,
         qtycso: Number(resultCalc),
         color: warna,
@@ -160,9 +177,9 @@ export default function AddItem({navigation}) {
       });
   }
   useEffect(() => {
-      setData(`${BaseURL}/item-list`, "itembatchid", "itemname", setItemData);
-      setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData);
-      setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData);
+      setData(`${BaseURL}/item-list`, "itemid", "itemname", setItemData, 1);
+      setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData, 0);
+      setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData, 0);
   },[]);
   
   return (
@@ -345,10 +362,9 @@ export default function AddItem({navigation}) {
                   <Text style={styles.buttonAccountText}>0</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.modalCalculatorButtonNumber} onPress={() => {
-                  //   console.log(input);
-                  // const newInputData = [...input];
-                  //   newInputData.pop();
-                  //   console.log(newInputData)
+                  setDisplayInput(`${displayInput}.`);
+                  setHistory(`${history}.`);
+                  setTempInput(`${tempInput}.`);
                 }}>
                   <Text style={styles.buttonAccountText}>.</Text>
                 </TouchableOpacity>
@@ -359,12 +375,12 @@ export default function AddItem({navigation}) {
                     if (tempInput != '') {
                       tempDataInput.push(tempInput);
                       for (var i = 0; i < input.length; i++) {
-                        tempCalculation += parseInt(input[i]);
+                        tempCalculation += parseFloat(input[i]);
                       }
-                      tempCalculation += parseInt(tempInput);
+                      tempCalculation += parseFloat(tempInput);
                     } else {
                       for (var i = 0; i < input.length; i++) {
-                        tempCalculation += parseInt(input[i]);
+                        tempCalculation += parseFloat(input[i]);
                       }
                     }
                     submitPerhitungan(tempCalculation.toString(), tempDataInput);
@@ -401,6 +417,7 @@ export default function AddItem({navigation}) {
             onBlur={() => setIsFocus(false)}
             onChange={item => {
               setItem(item.value);
+              setItemBatchId(item.id);
               setIsFocus(false);
             }}
 

@@ -9,12 +9,15 @@ import { CredentialContext, BaseURL } from '../../../../Credentials';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function DetailItem({ route, navigation }) {
-    const { csodetid, csodet2id, itemname, statusitem, color, location, itemid, remark, qty, historylist, inputlist, statussubmit } = route.params;
+    const { csodetid, csodet2id, itemname, statusitem, color, csocount,
+        location, itemid, itembatchid, remark, qty, historylist, 
+        inputlist, statussubmit } = route.params;
     const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
     const [itemData, setItemData] = useState([]);
     const [lokasiData, setLokasiData] = useState([]);
     const [warnaData, setWarnaData] = useState([]);
     const [item, setItem] = useState(itemid);
+    const [itemBatch, setItemBatch] = useState(itembatchid);
     const [itemName, setItemName] = useState(itemname);
     const [lokasi, setLokasi] = useState(location);
     const [warna, setWarna] = useState(color);
@@ -38,27 +41,46 @@ export default function DetailItem({ route, navigation }) {
     }
 
 
-    function setData(req, valueName, labelName, setVariable) {
+    function setData(req, valueName, labelName, setVariable, type) {
         fetch(req, {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
         })
-            .then((response) => response.json())
-            .then((response) => {
-                var count = Object.keys(response['data']).length;
-                let arrayData = [];
-                for (var i = 0; i < count; i++) {
-                    arrayData.push({
-                        value: response.data[i][valueName],
-                        label: response.data[i][labelName]
-                    });
+          .then((response) => response.json())
+          .then((response) => {
+            var count = Object.keys(response['data']).length;
+            let arrayData = [];
+            if (type == 1) {
+              for (var i = 0; i < count; i++) {
+                if(response.data[i]['batchno'] == null) {
+                  arrayData.push({
+                    value: response.data[i]['itembatchid'],
+                    label: response.data[i][labelName],
+                    id: response.data[i][valueName]
+                  });
+                } else {
+                  arrayData.push({
+                    value: response.data[i]['itembatchid'],
+                    label: `${response.data[i][labelName]} - ${response.data[i]['batchno']}`,
+                    id: response.data[i][valueName]
+                  });
                 }
-                setVariable(arrayData);
-            });
-    }
+                
+              }
+            } else {
+              for (var i = 0; i < count; i++) {
+                arrayData.push({
+                  value: response.data[i][valueName],
+                  label: response.data[i][labelName]
+                });
+              }
+            }
+            setVariable(arrayData);
+          });
+      }
 
     function submitPerhitungan(paramQty, paramInput) {
         fetch(`${BaseURL}/update-perhitungan`, {
@@ -93,7 +115,7 @@ export default function DetailItem({ route, navigation }) {
     }
 
     function submit() {
-        if(itemType == 'R' || itemType == 'A') {
+        if(itemType == 'R' ) {
             fetch(`${BaseURL}/update-item`, {
                 method: "POST",
                 headers: {
@@ -102,6 +124,7 @@ export default function DetailItem({ route, navigation }) {
                 },
                 body: JSON.stringify({
                     itemid: item,
+                    itembatchid: itemBatch,
                     lokasi: lokasi,
                     qtycso: Number(resultCalc),
                     color: warna,
@@ -160,9 +183,9 @@ export default function DetailItem({ route, navigation }) {
         
     }
     useEffect(() => {
-        setData(`${BaseURL}/item-list`, "itembatchid", "itemname", setItemData);
-        setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData);
-        setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData);
+        setData(`${BaseURL}/item-list`, "itemid", "itemname", setItemData, 1);
+        setData(`${BaseURL}/location-list`, "locationid", "locationname", setLokasiData, 0);
+        setData(`${BaseURL}/color-list`, "colorid", "colordesc", setWarnaData, 0);
         // 
     }, []);
 
@@ -242,7 +265,11 @@ export default function DetailItem({ route, navigation }) {
                                     <Ionicons name="backspace" size={20} color="white" />
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.modalCalculatorButtonOperand} onPress={() => {
-                                    const lastHistoryChar = history.slice(-1);
+                                    let lastHistoryChar;
+                                    if(history != null) {
+                                        lastHistoryChar = history.slice(-1);
+                                    }
+                                    
 
                                     if (!lastHistoryChar.includes('+') && history != '') {
                                         setHistory(`${history}+`);
@@ -386,7 +413,7 @@ export default function DetailItem({ route, navigation }) {
                     <View style={styles.formGroupLabel}>
                         <Text>Item</Text>
                     </View>
-                    {itemType == 'R' || itemType == 'A' ? <Dropdown
+                    {itemType == 'R' && csocount == 1 ?  <Dropdown
                         style={styles.formGroupInput}
                         data={itemData}
                         selectedTextProps={{ numberOfLines: 1 }}
@@ -397,11 +424,12 @@ export default function DetailItem({ route, navigation }) {
                         valueField="value"
                         placeholder={'--Pilih Item--'}
                         searchPlaceholder="Cari..."
-                        value={item}
+                        value={itemBatch}
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         onChange={item => {
-                            setItem(item.value);
+                            setItem(item.id);
+                            setItemBatch(item.value);
                             setIsFocus(false);
                         }}
 
@@ -441,7 +469,7 @@ export default function DetailItem({ route, navigation }) {
                     />
                 </View>
 
-                <View style={[warna.length === 0 ? styles.formGroupColorNull : styles.formGroupColorFilled]}>
+                <View style={[warna == null || warna.length === 0 ? styles.formGroupColorNull : styles.formGroupColorFilled]}>
                     <View style={styles.formGroupColorLabel}>
                         <Text>Kode Cat</Text>
                     </View>
@@ -480,7 +508,7 @@ export default function DetailItem({ route, navigation }) {
                     <TextInput
                         style={styles.formPerhitunganInput}
                         value={resultCalc}
-                        editable={input.length == 0}
+                        editable={inputlist == null}
                         onChangeText={handleTextQtyChange}
                         keyboardType='numeric'
                         placeholder='Jumlah Item'

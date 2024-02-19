@@ -7,7 +7,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function ItemList({ navigation }) {
     const { storedCredentials, setStoredCredentials } = React.useContext(CredentialContext);
-    // let listData = [];
     const [listData, setListData] = React.useState([]);
     const [csoActive, setCsoActive] = React.useState(false);
     const [trsId, setTrsId] = React.useState(0);
@@ -112,11 +111,11 @@ export default function ItemList({ navigation }) {
     }
 
     React.useEffect(() => {   
-        const interval1 = setInterval(checkCsoActive, 1000);
+        const interval1 = setInterval(checkCsoActive, 3000);
         const interval2 = setInterval(displayData, 3000);         
         return () => {
-            clearInterval(interval1);
-            clearInterval(interval2);
+            // clearInterval(interval1);
+            // clearInterval(interval2);
           }; 
            
     }, []);
@@ -156,21 +155,28 @@ export default function ItemList({ navigation }) {
                                     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("DetailItem", {
                                         csodetid: item.csodetid,
                                         csodet2id: item.csodet2id,
-                                        color: item.color.split(','),
+                                        color: item.color == null ? item.color : item.color.split(','),
                                         location: item.locationid,
                                         itemid: item.itemid,
+                                        itembatchid: item.itembatchid,
                                         itemname: item.itemname,
                                         remark: item.remark,
-                                        qty: item.qty.toString(),
-                                        historylist: item.history,
-                                        inputlist: item.inputs.split(','),
+                                        qty: item.qty == null ? item.qty : item.qty.toString(),
+                                        historylist: item.history == null ? '' : item.history,
+                                        inputlist: item.inputs == null ? [] : item.inputs.split(','),
                                         statusitem: item.statusitem,
-                                        statussubmit: item.statussubmit
+                                        statussubmit: item.statussubmit,
+                                        csocount: item.csocount
                                     })}>
                                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-                                            <View style={{ flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
-                                                <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>CSO {item.csocount}</Text>
-                                                <Text style={{ marginBottom: 5 }}>{item.itemname}</Text>
+                                            <View style={{ flexDirection: 'column',  justifyContent: 'space-evenly', width: '70%'}}>
+                                                <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>CSO {item.csocount}</Text>  
+                                                {
+                                                    item.batchno == null?
+                                                    <Text style={{ marginBottom: 5}}>{item.itemname}</Text> :
+                                                    <Text style={{ marginBottom: 5}}>{item.itemname} - {item.batchno}</Text>
+                                                }                                              
+                                                
                                                 {
                                                     item.statussubmit == "P" ?
                                                         <Text style={{ color: "green" }}>
@@ -183,7 +189,7 @@ export default function ItemList({ navigation }) {
                                                 }
                                             </View>
                                             <View style={{ flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
-                                                <Text style={{}}>{item.locationname}</Text>
+                                                <Text>{item.locationname}</Text>
                                                 <Text style={{ fontWeight: 'bold' }}>{item.qty} {item.uom}</Text>
                                             </View>
                                         </View>

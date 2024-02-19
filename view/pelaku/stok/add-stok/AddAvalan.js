@@ -14,7 +14,7 @@ export default function AddAvalan({navigation}) {
   const [lokasiData, setLokasiData] = useState([]);
   const [warnaData, setWarnaData] = useState([]);
   const [avalan, setAvalan] = useState(null);
-  const [avalanId, setAvalanId] = useState(null);
+  const [avalanBatchId, setAvalanBatchId] = useState(null);
   const [lokasi, setLokasi] = useState(null);
   const [warna, setWarna] = useState([]);
   const [keterangan, onChangeKeterangan] = useState('');
@@ -51,8 +51,8 @@ export default function AddAvalan({navigation}) {
           for (var i = 0; i < count; i++) {
             arrayData.push({
               value: response.data[i][valueName],
-              label: `${response.data[i]['batchno']} - ${response.data[i][labelName]}`,
-              id: response.data[i]['batchno']
+              label: `${response.data[i][labelName]} - ${response.data[i]['batchno']}`,
+              id: response.data[i]['itembatchid']
             });
           }
         } else {
@@ -78,8 +78,9 @@ export default function AddAvalan({navigation}) {
         },
         body: JSON.stringify({
           username: storedCredentials[0],
-          csoid: storedCredentials[7],
+          csoid: storedCredentials[5],
           itemid: avalan,
+          itembatchid: avalanBatchId,
           lokasi: lokasi,
           color: warna,
           statusItem: 'A'
@@ -143,13 +144,13 @@ export default function AddAvalan({navigation}) {
       },
       body: JSON.stringify({
         itemid: avalan,
-        batchno: avalanId,
+        itembatchid: avalanBatchId,
         lokasi: lokasi,
         qtycso: Number(resultCalc),
         color: warna,
         remark: keterangan,
         username: storedCredentials[0],
-        csoid: storedCredentials[7],
+        csoid: storedCredentials[5],
         csodetid: csoDetId,
         csodet2id: csoDet2Id,
         statusItem: 'A'
@@ -352,10 +353,9 @@ export default function AddAvalan({navigation}) {
                   <Text style={styles.buttonAccountText}>0</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.modalCalculatorButtonNumber} onPress={() => {
-                  //   console.log(input);
-                  // const newInputData = [...input];
-                  //   newInputData.pop();
-                  //   console.log(newInputData)
+                  setDisplayInput(`${displayInput}.`);
+                  setHistory(`${history}.`);
+                  setTempInput(`${tempInput}.`);
                 }}>
                   <Text style={styles.buttonAccountText}>.</Text>
                 </TouchableOpacity>
@@ -366,12 +366,12 @@ export default function AddAvalan({navigation}) {
                     if (tempInput != '') {
                       tempDataInput.push(tempInput);
                       for (var i = 0; i < input.length; i++) {
-                        tempCalculation += parseInt(input[i]);
+                        tempCalculation += parseFloat(input[i]);
                       }
-                      tempCalculation += parseInt(tempInput);
+                      tempCalculation += parseFloat(tempInput);
                     } else {
                       for (var i = 0; i < input.length; i++) {
-                        tempCalculation += parseInt(input[i]);
+                        tempCalculation += parseFloat(input[i]);
                       }
                     }
                     submitPerhitungan(tempCalculation.toString(), tempDataInput);
@@ -408,7 +408,7 @@ export default function AddAvalan({navigation}) {
             onBlur={() => setIsFocus(false)}
             onChange={item => {
               setAvalan(item.value);
-              setAvalanId(item.id);
+              setAvalanBatchId(item.id);
               setIsFocus(false);
             }}
 

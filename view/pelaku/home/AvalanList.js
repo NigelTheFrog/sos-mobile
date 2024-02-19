@@ -58,7 +58,7 @@ export default function AvalanList({ navigation }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        csoid: storedCredentials[3],
+        csoid: storedCredentials[5],
       }),
 
     })
@@ -151,24 +151,26 @@ export default function AvalanList({ navigation }) {
             <View style={styles.cardContainer}>
               {
                 listData.length > 0 ? listData.map((item) =>
-                  <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("DetailItem", {
+                  <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("DetailAvalan", {
                     csodetid: item.csodetid,
                     csodet2id: item.csodet2id,
-                    color: item.color.split(','),
+                    color: item.color == null ? item.color : item.color.split(','),
                     location: item.locationid,
                     itemid: item.itemid,
+                    itembatchid: item.itembatchid,
                     itemname: item.itemname,
                     remark: item.remark,
-                    qty: item.qty.toString(),
-                    historylist: item.history,
-                    inputlist: item.inputs.split(','),
+                    qty: item.qty == null ? item.qty : item.qty.toString(),
+                    historylist: item.history == null ? '' : item.history,
+                    inputlist: item.inputs == null ? [] : item.inputs.split(','),
                     statusitem: item.statusitem,
-                    statussubmit: item.statussubmit
+                    statussubmit: item.statussubmit,
+                    csocount: item.csocount
                   })}>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-                      <View style={{ flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
+                      <View style={{ flexDirection: 'column', justifyContent: 'space-evenly', width: '70%' }}>
                         <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>CSO {item.csocount}</Text>
-                        <Text style={{ marginBottom: 5 }}>{item.itemname}</Text>
+                        <Text style={{ marginBottom: 5 }}>{item.itemname} - {item.batchno}</Text>
                         {
                           item.statussubmit == "P" ?
                             <Text style={{ color: "green" }}>
