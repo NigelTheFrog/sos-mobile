@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "my-app",
+    "displayName": "SOS Mobile",
+    "slug": "my-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/image/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/image/splash-screen-modified.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nigelthefrog.myapp" 
+    },
+    "android": {
+      "adaptiveIcon": {
+        "package": "com.sutindo.my-app",
+        "foregroundImage": "./assets/image/icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.nigelthefrog.myapp"
+    },
+    "web": {
+      "favicon": "./assets/image/splash-screen.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ec22f5ba-477e-446e-bcf1-4b64f329c572"
+      }
+    }
+  }
+}
