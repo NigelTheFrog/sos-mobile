@@ -64,7 +64,7 @@ export default function DetailItem({ route, navigation }) {
                         [setInput, setResultCalc, setHistory, setDisplayInput, setTempInput]
                     )}
                 />
-                {itemType == 'R' && csocount == 1 ?
+                {itemType == 'R' && csocount == 1 && statussubmit != "P" ?
                     <Dropdownitem
                         groupStyle={styles.formGroup}
                         labelStyle={styles.formGroupLabel}
@@ -83,23 +83,16 @@ export default function DetailItem({ route, navigation }) {
                             setIsFocus(false);
                         }}
                     /> :
-                    <Input                    
-                    groupStyle={styles.formGroup}
-                    labelStyle={styles.formGroupLabel}
-                    label='Item'
-                    textInputStyle={styles.formGroupNamaItem}
-                    setter={setItemName}
-                    value={itemName}
-                    statusEditable={false}
-                />
-                //  <Input placeHolder='Nama Item'
-                //         placeHolderStyle={styles.formGroupPlaceHolderStyle}
-                //         textInputStyle={styles.formGroupNamaItem}
-                //         setter={setItemName}
-                //         value={itemName}
-                //         statusEditable={false} 
-                //         />
-                        }
+                    <Input
+                        groupStyle={styles.formGroup}
+                        labelStyle={styles.formGroupLabel}
+                        label='Item'
+                        textInputStyle={styles.formGroupNamaItem}
+                        setter={setItemName}
+                        value={itemName}
+                        statusEditable={false}
+                    />
+                }
 
                 <Dropdownitem
                     groupStyle={styles.formGroup}
@@ -165,29 +158,29 @@ export default function DetailItem({ route, navigation }) {
                     value={keterangan}
                 />
                 {statussubmit == "D" ?
-                <ProcessButton 
-                buttonStyle={styles.buttonSubmit}
-                onButtonPressed={
-                  () => DetailController.updateItem(
-                    [csoDetId,csoDet2Id],
-                    [storedCredentials[0], storedCredentials[3]],
-                    [item, itemBatch, lokasi, resultCalc, warna, keterangan],
-                    'R',
-                    navigation.navigate("HomeItem")
-                  )
-              }
-                additionalComponent={<Text style={styles.buttonAccountText}><Ionicons name="save-sharp" size={20} color="white" />   Simpan</Text>}
-              />
-                : null}
+                    <ProcessButton
+                        buttonStyle={styles.buttonSubmit}
+                        onButtonPressed={
+                            () => DetailController.updateItem(
+                                [csoDetId, csoDet2Id],
+                                [storedCredentials[0], storedCredentials[3]],
+                                [item, itemBatch, lokasi, resultCalc, warna, keterangan],
+                                'R',
+                                navigation.navigate("HomeItem")
+                            )
+                        }
+                        additionalComponent={<Text style={styles.buttonAccountText}><Ionicons name="save-sharp" size={20} color="white" />   Simpan</Text>}
+                    />
+                    : null}
                 {
                     statussubmit == "P" || csocount > 1 ?
-                        <ProcessButton 
+                        <ProcessButton
                             buttonStyle={styles.buttonDelete}
                             onButtonPressed={() => navigation.goBack()}
                             additionalComponent={<Text style={styles.buttonAccountText}>Keluar</Text>}
                         />
                         :
-                        <ProcessButton 
+                        <ProcessButton
                             buttonStyle={styles.buttonDelete}
                             onButtonPressed={() => DetailController.hapusDataCSO([csoDetId, csoDet2Id], navigation)}
                             additionalComponent={<Text style={styles.buttonAccountText}><Ionicons name="trash" size={20} color="white" />Hapus</Text>}

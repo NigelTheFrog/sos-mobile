@@ -135,7 +135,7 @@ class ProcessController {
         })
             .then((responseData) => {
                 if (responseData['result'] == 1) {
-                    navigation;
+                    navigation.navigate("HomeItem");
                 } else {
                     Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan lakukan penyimpanan ulang', [
                         { text: 'OK' },

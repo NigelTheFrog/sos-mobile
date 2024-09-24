@@ -159,7 +159,7 @@ export default function AddAvalan({ navigation }) {
               [storedCredentials[0], storedCredentials[5]],
               [avalan, avalanBatchId, lokasi, resultCalc, warna, keterangan],
               'A',
-              navigation.navigate("HomeItem")
+              navigation
             )
           }
           additionalComponent={<Text style={styles.buttonAccountText}><Ionicons name="save-sharp" size={20} color="white" />   Simpan</Text>}

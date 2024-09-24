@@ -152,7 +152,7 @@ export default function AddItem({ navigation }) {
               [storedCredentials[0], storedCredentials[3]],
               [item, itemBatchId, lokasi, resultCalc, warna, keterangan],
               'R',
-              navigation.navigate("HomeItem")
+              navigation
             )
         }
           additionalComponent={<Text style={styles.buttonAccountText}><Ionicons name="save-sharp" size={20} color="white" />   Simpan</Text>}

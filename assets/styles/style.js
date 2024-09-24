@@ -258,6 +258,7 @@ export const styles = StyleSheet.create({
     },
     formGroupNamaItem: {
         backgroundColor: Colors.primary,       
+        color: Colors.brand,
         width: '80%',
         paddingLeft: 15,
         fontSize: 15
