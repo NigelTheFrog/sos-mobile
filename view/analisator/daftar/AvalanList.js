@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import * as React from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { styles } from '../../../assets/styles/style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CredentialContext, BaseURL } from '../../../Credentials';

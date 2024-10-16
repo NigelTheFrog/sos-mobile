@@ -8,19 +8,19 @@ class ProcessController {
             let arrayData = [];
             if (type == 1) {
                 for (var i = 0; i < count; i++) {
-                    // if (response.data[i]['batchno'] == null) {
+                    if (response.data[i]['statusitem'] == 'R') {
                         arrayData.push({
                             value: response.data[i][valueName],
                             label: response.data[i][labelName],
                             id: response.data[i]['itembatchid']
                         });
-                    // } else {
-                    //     arrayData.push({
-                    //         value: response.data[i][valueName],
-                    //         label: `${response.data[i][labelName]} - ${response.data[i]['batchno']}`,
-                    //         id: response.data[i]['itembatchid']
-                    //     });
-                    // }
+                    } else {
+                        arrayData.push({
+                            value: response.data[i][valueName],
+                            label: `${response.data[i][labelName]} \n${response.data[i]['dimension']} \n${response.data[i]['tolerance']}`,
+                            id: response.data[i]['itembatchid']
+                        });
+                    }
 
                 }
             } else {

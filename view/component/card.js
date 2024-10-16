@@ -38,7 +38,7 @@ export default Card = ({
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-evenly', width: '70%' }}>
                                         <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>CSO {item.csocount}</Text>
                                         {
-                                            item.batchno == null ?
+                                            item.statusitem == "R" ?
                                                 <Text style={{ marginBottom: 5 }}>{item.itemname}</Text> :
                                                 <Text style={{ marginBottom: 5 }}>{item.itemname} - {item.batchno}</Text>
                                         }
@@ -71,7 +71,7 @@ export default Card = ({
                                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-evenly', width: '75%' }}>
                                         {
-                                            item.batchno == null ?
+                                            item.statusitem == "R" ?
                                                 <Text style={{ marginBottom: 3, fontWeight: 'bold' }}>{item.itemname}</Text> :
                                                 <Text style={{ marginBottom: 3, fontWeight: 'bold' }}>{item.itemname} - {item.batchno}</Text>
                                         }
