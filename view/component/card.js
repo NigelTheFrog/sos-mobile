@@ -30,7 +30,8 @@ export default Card = ({
                             inputlist: item.inputs == null ? [] : item.inputs.split(','),
                             statusitem: item.statusitem,
                             statussubmit: item.statussubmit,
-                            csocount: item.csocount
+                            csocount: item.csocount,
+                            gradeid: item.grade
                         })}
                         additionalComponent={
                             userType == 0 ?

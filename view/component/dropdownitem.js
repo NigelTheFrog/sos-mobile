@@ -5,6 +5,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 export default Dropdownitem = ({
     label,
     placeHolder,
+    searchable,
     setter,
     value,
     data,
@@ -32,7 +33,7 @@ export default Dropdownitem = ({
             placeholderStyle={placeHolderStyle}
             searchPlaceholder={searchPlaceholder ?? 'Cari...'}
             value={value}
-            search={true}
+            search={searchable ?? true}
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             onChange={setter}

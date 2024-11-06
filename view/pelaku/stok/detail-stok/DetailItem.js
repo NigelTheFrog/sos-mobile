@@ -12,19 +12,34 @@ import ProcessButton from '../../../component/processButton';
 import DetailController from '../../../../controller/DetailController';
 
 export default function DetailItem({ route, navigation }) {
-    const { csodetid, csodet2id, itemname, statusitem, color, csocount,
+    const { csodetid, csodet2id, itemname, statusitem, color, gradeid, csocount,
         location, itemid, itembatchid, remark, qty, historylist,
         inputlist, statussubmit } = route.params;
     const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
     const [itemData, setItemData] = useState([]);
     const [lokasiData, setLokasiData] = useState([]);
     const [warnaData, setWarnaData] = useState([]);
+    const [gradeData] = useState([
+        {
+          value: 1,
+          label: 'Grade 1',
+        },
+        {
+          value: 2,
+          label: 'Grade 2',
+        },
+        {
+          value: 3,
+          label: 'Grade 3',
+        }
+      ]);
     const [item, setItem] = useState(itemid);
     const [itemBatch, setItemBatch] = useState(itembatchid);
     const [itemName, setItemName] = useState(itemname);
     const [lokasi, setLokasi] = useState(location);
     const [warna, setWarna] = useState(color);
     const [keterangan, onChangeKeterangan] = useState(remark);
+    const [grade, setGrade] = useState(gradeid);
     const [history, setHistory] = useState(historylist);
     const [displayInput, setDisplayInput] = useState('');
     const [tempInput, setTempInput] = useState('');
@@ -123,7 +138,23 @@ export default function DetailItem({ route, navigation }) {
                         setWarna(item);
                     }}
                 />
-
+                <Dropdownitem
+                    groupStyle={styles.formGroup}
+                    labelStyle={styles.formGroupLabel}
+                    label='Grade'
+                    dropdownStyle={styles.formGroupInput}
+                    data={gradeData}
+                    placeHolder="--Pilih Grade--"
+                    placeHolderStyle={styles.formGroupPlaceHolderStyle}
+                    setFocus={setIsFocus}
+                    valueField="value"
+                    value={grade}
+                    searchable={false}
+                    setter={grade => {
+                        setGrade(grade.value);
+                        setIsFocus(false);
+                    }}
+                />
                 <Input
                     groupStyle={styles.formPerhitungan}
                     labelStyle={styles.formPerhitunganLabel}
@@ -164,7 +195,7 @@ export default function DetailItem({ route, navigation }) {
                             () => DetailController.updateItem(
                                 [csoDetId, csoDet2Id],
                                 [storedCredentials[0], storedCredentials[3]],
-                                [item, itemBatch, lokasi, resultCalc, warna, keterangan],
+                                [item, itemBatch, lokasi, resultCalc, warna, keterangan, grade],
                                 'R',
                                 navigation.navigate("HomeItem")
                             )

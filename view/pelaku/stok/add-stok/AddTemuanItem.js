@@ -8,15 +8,31 @@ import { styles } from '../../../../assets/styles/style';
 import AvoidingWrapper from '../../../../assets/styles/avoidingWrapper';
 import { CredentialContext, BaseURL } from '../../../../Credentials';
 import request from '../../../../request';
+import Dropdownitem from '../../../component/dropdownitem';
 
 export default function AddTemuanItem({navigation}) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
   const [lokasiData, setLokasiData] = useState([]);
   const [warnaData, setWarnaData] = useState([]);
+  const [gradeData] = useState([
+    {
+      value: 1,
+      label: 'Grade 1',
+    },
+    {
+      value: 2,
+      label: 'Grade 2',
+    },
+    {
+      value: 3,
+      label: 'Grade 3',
+    }
+  ]);
   const [item, onChangeItem] = useState('');
   const [itemId, setItemId] = useState('');
   const [lokasi, setLokasi] = useState(null);
   const [warna, setWarna] = useState([]);
+  const [grade, setGrade] = useState('');
   const [keterangan, onChangeKeterangan] = useState('');
   const [history, setHistory] = useState('');
   const [displayInput, setDisplayInput] = useState('');
@@ -446,6 +462,23 @@ export default function AddTemuanItem({navigation}) {
             <Text style={styles.buttonAccountText}>Hitung</Text>
           </TouchableOpacity>
         </View>
+        <Dropdownitem
+          groupStyle={styles.formGroup}
+          labelStyle={styles.formGroupLabel}
+          label='Grade'
+          dropdownStyle={styles.formGroupInput}
+          data={gradeData}
+          placeHolder="--Pilih Grade--"
+          placeHolderStyle={styles.formGroupPlaceHolderStyle}
+          setFocus={setIsFocus}
+          valueField="value"
+          value={grade}
+          searchable={false}
+          setter={grade => {
+            setGrade(grade.value);
+            setIsFocus(false);
+          }}
+        />
         <View style={styles.formGroupKeterangan}>
           <View style={styles.formGroupLabel}>
             <Text>Ket.</Text>

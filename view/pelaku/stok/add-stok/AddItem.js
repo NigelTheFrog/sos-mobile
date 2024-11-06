@@ -15,12 +15,27 @@ export default function AddItem({ navigation }) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
   const [itemData, setItemData] = useState([]);
   const [lokasiData, setLokasiData] = useState([]);
+  const [gradeData] = useState([
+    {
+      value: 1,
+      label: 'Grade 1',
+    },
+    {
+      value: 2,
+      label: 'Grade 2',
+    },
+    {
+      value: 3,
+      label: 'Grade 3',
+    }
+  ]);
   const [warnaData, setWarnaData] = useState([]);
   const [item, setItem] = useState(null);
   const [itemBatchId, setItemBatchId] = useState(null);
   const [lokasi, setLokasi] = useState(null);
   const [warna, setWarna] = useState([]);
   const [keterangan, onChangeKeterangan] = useState('');
+  const [grade, setGrade] = useState('');
   const [history, setHistory] = useState('');
   const [displayInput, setDisplayInput] = useState('');
   const [tempInput, setTempInput] = useState('');
@@ -56,8 +71,8 @@ export default function AddItem({ navigation }) {
           setTemporaryInput={setTempInput}
           setter={() => ProcessController.submitPerhitungan(
             csoDet2Id, tempInput, history, input,
-            [setInput,setResultCalc,setHistory,setDisplayInput,setTempInput]
-            )}
+            [setInput, setResultCalc, setHistory, setDisplayInput, setTempInput]
+          )}
         />
         <Dropdownitem
           groupStyle={styles.formGroup}
@@ -106,7 +121,24 @@ export default function AddItem({ navigation }) {
             setWarna(item);
           }}
         />
-        <Input 
+        <Dropdownitem
+          groupStyle={styles.formGroup}
+          labelStyle={styles.formGroupLabel}
+          label='Grade'
+          dropdownStyle={styles.formGroupInput}
+          data={gradeData}
+          placeHolder="--Pilih Grade--"
+          placeHolderStyle={styles.formGroupPlaceHolderStyle}
+          setFocus={setIsFocus}
+          valueField="value"
+          value={grade}
+          searchable={false}
+          setter={grade => {
+            setGrade(grade.value);
+            setIsFocus(false);
+          }}
+        />
+        <Input
           groupStyle={styles.formPerhitungan}
           labelStyle={styles.formPerhitunganLabel}
           label="Qty."
@@ -123,14 +155,14 @@ export default function AddItem({ navigation }) {
           placeHolder='Jumlah Item'
           placeHolderStyle={styles.formGroupColorPlaceHorlder}
           additionalItem={
-            <ProcessButton 
+            <ProcessButton
               buttonStyle={styles.formPerhitunganButton}
               onButtonPressed={() => ProcessController.showCalculator(
-                [csoDetId,csoDet2Id], 
-                [storedCredentials[0], storedCredentials[3]], 
-                [item, itemBatchId, lokasi, warna, 'R'], 
-                [setCsoDetId, setCsoDet2Id, setModalVisible], 
-                isModalVisible    
+                [csoDetId, csoDet2Id],
+                [storedCredentials[0], storedCredentials[3]],
+                [item, itemBatchId, lokasi, warna, 'R', grade],
+                [setCsoDetId, setCsoDet2Id, setModalVisible],
+                isModalVisible
               )}
               additionalComponent={<Text style={styles.buttonAccountText}>Hitung</Text>}
             />
@@ -144,23 +176,23 @@ export default function AddItem({ navigation }) {
           value={keterangan}
           setter={onChangeKeterangan}
         />
-        <ProcessButton 
+        <ProcessButton
           buttonStyle={styles.buttonSubmit}
           onButtonPressed={
             () => ProcessController.addItem(
-              [csoDetId,csoDet2Id],
+              [csoDetId, csoDet2Id],
               [storedCredentials[0], storedCredentials[3]],
-              [item, itemBatchId, lokasi, resultCalc, warna, keterangan],
+              [item, itemBatchId, lokasi, resultCalc, warna, keterangan, grade],
               'R',
               navigation
             )
-        }
+          }
           additionalComponent={<Text style={styles.buttonAccountText}><Ionicons name="save-sharp" size={20} color="white" />   Simpan</Text>}
         />
-        <ProcessButton 
+        <ProcessButton
           buttonStyle={styles.buttonDelete}
           additionalComponent={<Text style={styles.buttonAccountText}><Ionicons name="trash" size={20} color="white" />   Hapus</Text>}
-        />        
+        />
       </View>
     </AvoidingWrapper>
   )

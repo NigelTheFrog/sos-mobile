@@ -113,7 +113,8 @@ class DetailController {
             csoid: credentialData[1],
             csodetid: csodetid[0],
             csodet2id: csodetid[1],
-            statusItem: type
+            statusItem: type,
+            grade: data[6]
         } : {
             itemid: data[0],
             temuanname: data[1],
@@ -125,7 +126,8 @@ class DetailController {
             csoid: credentialData[1],
             csodetid: csodetid[0],
             csodet2id: csodetid[1],
-            statusItem: type
+            statusItem: type,
+            grade: data[6]
         })
             .then((responseData) => {
                 if (responseData['result'] == 1) {

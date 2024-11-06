@@ -57,7 +57,8 @@ class ProcessController {
                     itembatchid: data[1],
                     lokasi: data[2],
                     color: data[3],
-                    statusItem: data[4]
+                    statusItem: data[4],
+                    grade: data[5]
                 }).then((responseData) => {
                     if (responseData['result'] == 1) {
                         setter[0](responseData['csodetid']);
@@ -127,6 +128,7 @@ class ProcessController {
             qtycso: Number(data[3]),
             color: data[4],
             remark: data[5],
+            grade: data[6],
             username: credentialData[0],
             csoid: credentialData[1],
             csodetid: csoDetId[0],
