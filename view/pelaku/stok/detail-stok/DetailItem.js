@@ -13,7 +13,7 @@ import DetailController from '../../../../controller/DetailController';
 
 export default function DetailItem({ route, navigation }) {
     const { csodetid, csodet2id, itemname, statusitem, color, gradeid, csocount,
-        location, itemid, itembatchid, remark, qty, historylist,
+        location, itemid, trsdet, itembatchid, remark, qty, historylist,
         inputlist, statussubmit } = route.params;
     const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
     const [itemData, setItemData] = useState([]);
@@ -36,6 +36,7 @@ export default function DetailItem({ route, navigation }) {
     const [item, setItem] = useState(itemid);
     const [itemBatch, setItemBatch] = useState(itembatchid);
     const [itemName, setItemName] = useState(itemname);
+    const [trsdetid, setTrsDetId] = useState(trsdet);
     const [lokasi, setLokasi] = useState(location);
     const [warna, setWarna] = useState(color);
     const [keterangan, onChangeKeterangan] = useState(remark);
@@ -95,6 +96,7 @@ export default function DetailItem({ route, navigation }) {
                         setter={item => {
                             setItem(item.value);
                             setItemBatch(item.id);
+                            setTrsDetId(item.trsdetid);
                             setIsFocus(false);
                         }}
                     /> :
@@ -195,7 +197,7 @@ export default function DetailItem({ route, navigation }) {
                             () => DetailController.updateItem(
                                 [csoDetId, csoDet2Id],
                                 [storedCredentials[0], storedCredentials[3]],
-                                [item, itemBatch, lokasi, resultCalc, warna, keterangan, grade],
+                                [item, itemBatch, lokasi, resultCalc, warna, keterangan, grade, trsdetid],
                                 'R',
                                 navigation.navigate("HomeItem")
                             )

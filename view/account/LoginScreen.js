@@ -17,45 +17,51 @@ export default function LoginScreen({ navigation }) {
   const [isFocus, setIsFocus] = React.useState(false);
   const [server, setServer] = React.useState('');
   const [serverData] = React.useState([
-    { value: 'http://srmsby.sos.sutindo.net:8056', label: 'SRM SBY' },
-    { value: 'http://kkssby.sos.sutindo.net:8056', label: 'KKS SBY' },
-    { value: 'http://ssosmd.sos.sutindo.net:8056', label: 'SSO SMD' },
-    { value: 'http://srmbpn.sos.sutindo.net:8056', label: 'SRM BPN' },
-    { value: 'http://ssosby.sos.sutindo.net:8056', label: 'SSO SBY' },
     { value: 'http://aassby.sos.sutindo.net:8056', label: 'AAS SBY' },
-    { value: 'http://srmsmg.sos.sutindo.net:8056', label: 'SRM SMG' },
-    { value: 'http://fasmlg.sos.sutindo.net:8056', label: 'FAS MLG' },
-    { value: 'http://smisby.sos.sutindo.net:8056', label: 'SMI SBY' },
-    { value: 'http://pstsby.sos.sutindo.net:8056', label: 'PST SBY' },
-    { value: 'http://pmisby.sos.sutindo.net:8056', label: 'PMI SBY' },
-    { value: 'http://rra.sos.sutindo.net:8056', label: 'RRA' },
+    { value: 'http://aassmg.sos.sutindo.net:8056', label: 'AAS SMG' },
+    { value: 'http://abbamb.sos.sutindo.net:8056', label: 'ABB AMB' },
+    { value: 'http://abbjyp.sos.sutindo.net:8056', label: 'ABB JYP' },
+    { value: 'http://abbtmk.sos.sutindo.net:8056', label: 'ABB TMK' },
+    { value: 'http://aerbli.sos.sutindo.net:8056', label: 'AER BLI' },
+    { value: 'http://aerjkt.sos.sutindo.net:8056', label: 'AER JKT' },
+    { value: 'http://aersby.sos.sutindo.net:8056', label: 'AER SBY' },
+    { value: 'http://aersmg.sos.sutindo.net:8056', label: 'AER SMG' },
     { value: 'http://bas.sos.sutindo.net:8056', label: 'BAS' },
+    { value: 'http://fasmlg.sos.sutindo.net:8056', label: 'FAS MLG' },
+    { value: 'http://gcijkt.sos.sutindo.net:8056', label: 'GCI JKT' },
+    { value: 'http://gcisby.sos.sutindo.net:8056', label: 'GCI SBY' },
+    { value: 'http://ivijkt.sos.sutindo.net:8056', label: 'IVI JKT' },
+    { value: 'http://ivisby.sos.sutindo.net:8056', label: 'IVI SBY' },
+    { value: 'http://kkssby.sos.sutindo.net:8056', label: 'KKS SBY' },
+    { value: 'http://pmijkt.sos.sutindo.net:8056', label: 'PMI JKT' },
+    { value: 'http://pmisby.sos.sutindo.net:8056', label: 'PMI SBY' },
     { value: 'http://pstjktb.sos.sutindo.net:8056', label: 'PST JKTB' },
     { value: 'http://pstjktr.sos.sutindo.net:8056', label: 'PST JKTR' },
-    { value: 'http://pstpnk.sos.sutindo.net:8056', label: 'PST PNK' },
-    { value: 'http://aersby.sos.sutindo.net:8056', label: 'AER SBY' },
     { value: 'http://pstpku.sos.sutindo.net:8056', label: 'PST PKU' },
-    { value: 'http://spijkt.sos.sutindo.net:8056', label: 'SPI JKT' },
-    { value: 'http://smssrg.sos.sutindo.net:8056', label: 'SMS SRG' },
-    { value: 'http://gcisby.sos.sutindo.net:8056', label: 'GCI SBY' },
-    { value: 'http://ssssby.sos.sutindo.net:8056', label: 'SSS SBY' },
-    { value: 'http://abbjyp.sos.sutindo.net:8056', label: 'ABB JYP' },
-    { value: 'http://abbamb.sos.sutindo.net:8056', label: 'ABB AMB' },
-    { value: 'http://abbtmk.sos.sutindo.net:8056', label: 'ABB TMK' },
+    { value: 'http://pstpnk.sos.sutindo.net:8056', label: 'PST PNK' },
     { value: 'http://pstpst.sos.sutindo.net:8056', label: 'PST PST' },
-    { value: 'http://aassmg.sos.sutindo.net:8056', label: 'AAS SMG' },
-    { value: 'http://srmjkt.sos.sutindo.net:8056', label: 'SRM JKT' },
-    { value: 'http://srmsmgs.sos.sutindo.net:8056', label: 'SRM SMGS' },
-    { value: 'http://pmijkt.sos.sutindo.net:8056', label: 'PMI JKT' },
-    { value: 'http://aerjkt.sos.sutindo.net:8056', label: 'AER JKT' },
-    { value: 'http://aersmg.sos.sutindo.net:8056', label: 'AER SMG' },
-    { value: 'http://aerbli.sos.sutindo.net:8056', label: 'AER BLI' },
-    { value: 'http://scisby.sos.sutindo.net:8056', label: 'SCI SBY' },
+    { value: 'http://pstsby.sos.sutindo.net:8056', label: 'PST SBY' },
+    { value: 'http://rra.sos.sutindo.net:8056', label: 'RRA' },
     { value: 'http://scickr.sos.sutindo.net:8056', label: 'SCI CKR' },
-    { value: 'http://ivisby.sos.sutindo.net:8056', label: 'IVI SBY' },
-    { value: 'http://ivijkt.sos.sutindo.net:8056', label: 'IVI JKT' },
-    // { value: 'dev.sos.sutindo.net:8056', label: 'DEV' },
-    // { value: 'trial.sos.sutindo.net:8056', label: 'TRIAL' }
+    { value: 'http://scisby.sos.sutindo.net:8056', label: 'SCI SBY' },
+    { value: 'http://smisby.sos.sutindo.net:8056', label: 'SMI SBY' },
+    { value: 'http://smsnbr.sos.sutindo.net:8056', label: 'SMS NBR' },
+    { value: 'http://smssrg.sos.sutindo.net:8056', label: 'SMS SRG' },
+    { value: 'http://spijkt.sos.sutindo.net:8056', label: 'SPI JKT' },
+    { value: 'http://srmbpn.sos.sutindo.net:8056', label: 'SRM BPN' },
+    { value: 'http://srmjkt.sos.sutindo.net:8056', label: 'SRM JKT' },
+    { value: 'http://srmsby.sos.sutindo.net:8056', label: 'SRM SBY' },
+    { value: 'http://srmsmg.sos.sutindo.net:8056', label: 'SRM SMG' },
+    { value: 'http://ssosby.sos.sutindo.net:8056', label: 'SSO SBY' },
+    { value: 'http://ssosmd.sos.sutindo.net:8056', label: 'SSO SMD' },
+    { value: 'http://sssjkt.sos.sutindo.net:8056', label: 'SSS JKT' },
+    { value: 'http://ssssby.sos.sutindo.net:8056', label: 'SSS SBY' },
+    { value: 'http://stinox.sos.sutindo.net:8056', label: 'STINOX' },
+    { value: 'http://trial.sos.sutindo.net:8056', label: 'TRIAL' },
+    { value: 'http://dev.sos.sutindo.net:8056', label: 'DEV' },
+    { value: 'http://devrtg.sos.sutindo.net:8056', label: 'DEV REALTING' },
+    { value: 'http://devsap.sos.sutindo.net:8056', label: 'DEV SAP' },
+    { value: 'http://192.168.100.147:8000', label: 'DEV LOCAL NIGEL' }    
   ]);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -101,6 +107,15 @@ export default function LoginScreen({ navigation }) {
                   setIsFocus(false);
                 }}
               />
+              {/* <Input
+                labelStyle={styles.textInputLabel}
+                label='Host'
+                textInputStyle={styles.textInput}
+                autoCapitalize='none'
+                setter={setServer}
+                placeHolder="Isikan Username Anda"
+                value={server}
+              /> */}
               <Input
                 labelStyle={styles.textInputLabel}
                 label='Username'

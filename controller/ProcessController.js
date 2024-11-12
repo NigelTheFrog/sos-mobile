@@ -12,13 +12,13 @@ class ProcessController {
                         arrayData.push({
                             value: response.data[i][valueName],
                             label: response.data[i][labelName],
-                            id: response.data[i]['itembatchid']
+                            trsdetid: response.data[i]['trsdetid']
                         });
                     } else {
                         arrayData.push({
                             value: response.data[i][valueName],
                             label: `${response.data[i][labelName]} \n${response.data[i]['dimension']} \n${response.data[i]['tolerance']}`,
-                            id: response.data[i]['itembatchid']
+                            trsdetid: response.data[i]['trsdetid']
                         });
                     }
 
@@ -58,7 +58,8 @@ class ProcessController {
                     lokasi: data[2],
                     color: data[3],
                     statusItem: data[4],
-                    grade: data[5]
+                    grade: data[5],
+                    trsdetid: data[6],
                 }).then((responseData) => {
                     if (responseData['result'] == 1) {
                         setter[0](responseData['csodetid']);
@@ -129,6 +130,7 @@ class ProcessController {
             color: data[4],
             remark: data[5],
             grade: data[6],
+            trsdetid: data[7],
             username: credentialData[0],
             csoid: credentialData[1],
             csodetid: csoDetId[0],

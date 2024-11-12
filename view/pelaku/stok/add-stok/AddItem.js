@@ -31,6 +31,7 @@ export default function AddItem({ navigation }) {
   ]);
   const [warnaData, setWarnaData] = useState([]);
   const [item, setItem] = useState(null);
+  const [trsdetid, setTrsDetId] = useState(null);
   const [itemBatchId, setItemBatchId] = useState(null);
   const [lokasi, setLokasi] = useState(null);
   const [warna, setWarna] = useState([]);
@@ -47,11 +48,10 @@ export default function AddItem({ navigation }) {
   const [resultCalc, setResultCalc] = useState('');
 
   useEffect(() => {
-    ProcessController.setData('item-list', "itemid", "itemname", setItemData, 1);
+    ProcessController.setData('item-list', "itemid", "itemname", setItemData, 1);    
     ProcessController.setData('location-list', "locationid", "locationname", setLokasiData, 0);
     ProcessController.setData('color-list', "colorid", "colordesc", setWarnaData, 0);
   }, []);
-
   return (
     <AvoidingWrapper>
       <View style={styles.styledContainer}>
@@ -89,6 +89,7 @@ export default function AddItem({ navigation }) {
           setter={item => {
             setItem(item.value);
             setItemBatchId(item.id);
+            setTrsDetId(item.trsdetid);
             setIsFocus(false);
           }}
         />
@@ -160,7 +161,7 @@ export default function AddItem({ navigation }) {
               onButtonPressed={() => ProcessController.showCalculator(
                 [csoDetId, csoDet2Id],
                 [storedCredentials[0], storedCredentials[3]],
-                [item, itemBatchId, lokasi, warna, 'R', grade],
+                [item, itemBatchId, lokasi, warna, 'R', grade, trsdetid],
                 [setCsoDetId, setCsoDet2Id, setModalVisible],
                 isModalVisible
               )}
@@ -182,7 +183,7 @@ export default function AddItem({ navigation }) {
             () => ProcessController.addItem(
               [csoDetId, csoDet2Id],
               [storedCredentials[0], storedCredentials[3]],
-              [item, itemBatchId, lokasi, resultCalc, warna, keterangan, grade],
+              [item, itemBatchId, lokasi, resultCalc, warna, keterangan, grade, trsdetid],
               'R',
               navigation
             )

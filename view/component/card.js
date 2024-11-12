@@ -31,7 +31,8 @@ export default Card = ({
                             statusitem: item.statusitem,
                             statussubmit: item.statussubmit,
                             csocount: item.csocount,
-                            gradeid: item.grade
+                            gradeid: item.grade,
+                            trsdet: item.trsdetid
                         })}
                         additionalComponent={
                             userType == 0 ?
@@ -55,12 +56,13 @@ export default Card = ({
                                         }
                                         {
                                             item.csocount > 1 ?
+                                            item.keterangan.split(',').map(element => 
                                                 <Text style={{ color: "#d98a02" }}>
-                                                    <Ionicons name="information" size={15} color="#d98a02" /> {item.keterangan}
+                                                    <Ionicons name="information" size={15} color="#d98a02" /> {element}
                                                 </Text>
+                                            )                                                
                                                 :
                                                 null
-
                                         }
                                     </View>
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-evenly', width: '25%', marginLeft: 5 }}>
