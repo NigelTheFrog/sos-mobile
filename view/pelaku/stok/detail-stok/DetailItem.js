@@ -12,8 +12,8 @@ import ProcessButton from '../../../component/processButton';
 import DetailController from '../../../../controller/DetailController';
 
 export default function DetailItem({ route, navigation }) {
-    const { csodetid, csodet2id, itemname, statusitem, color, gradeid, csocount,
-        location, itemid, trsdet, itembatchid, remark, qty, historylist,
+    const { csodetid, csodet2id, itemname, statusitem, statushslcso,
+        itemid, trsdet, itembatchid, qty, historylist, location,
         inputlist, statussubmit } = route.params;
     const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
     const [itemData, setItemData] = useState([]);
@@ -38,9 +38,9 @@ export default function DetailItem({ route, navigation }) {
     const [itemName, setItemName] = useState(itemname);
     const [trsdetid, setTrsDetId] = useState(trsdet);
     const [lokasi, setLokasi] = useState(location);
-    const [warna, setWarna] = useState(color);
-    const [keterangan, onChangeKeterangan] = useState(remark);
-    const [grade, setGrade] = useState(gradeid);
+    const [warna, setWarna] = useState([]);
+    const [keterangan, onChangeKeterangan] = useState('');
+    const [grade, setGrade] = useState('');
     const [history, setHistory] = useState(historylist);
     const [displayInput, setDisplayInput] = useState('');
     const [tempInput, setTempInput] = useState('');
@@ -80,7 +80,7 @@ export default function DetailItem({ route, navigation }) {
                         [setInput, setResultCalc, setHistory, setDisplayInput, setTempInput]
                     )}
                 />
-                {itemType == 'R' && csocount == 1 && statussubmit != "P" ?
+                {itemType == 'R' && statushslcso == 'D' && statussubmit != "P" ?
                     <Dropdownitem
                         groupStyle={styles.formGroup}
                         labelStyle={styles.formGroupLabel}
@@ -206,7 +206,7 @@ export default function DetailItem({ route, navigation }) {
                     />
                     : null}
                 {
-                    statussubmit == "P" || csocount > 1 ?
+                    statussubmit == "P" || statushslcso == 'T' ?
                         <ProcessButton
                             buttonStyle={styles.buttonDelete}
                             onButtonPressed={() => navigation.goBack()}

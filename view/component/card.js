@@ -8,12 +8,11 @@ export default Card = ({
     navigation,
     type,
     userType // 0 = pelaku, 1 = analisator
-}) => (
+}) => (    
     <>
         <View style={styles.cardContainer}>
             {
-                data.length > 0 ? data.map((item) =>
-
+                data.length > 0 ? data.map((item) =>                     
                     <ProcessButton
                         buttonStyle={[styles.card, { backgroundColor: item.csocount == 1 ? '#b7e1cd' : item.csocount == 2 ? '#fce8b2' : '#f4c7c3' }]}
                         onButtonPressed={() => navigation.navigate(type == 'R' ? "DetailItem" : "DetailAvalan", {
@@ -30,7 +29,7 @@ export default Card = ({
                             inputlist: item.inputs == null ? [] : item.inputs.split(','),
                             statusitem: item.statusitem,
                             statussubmit: item.statussubmit,
-                            csocount: item.csocount,
+                            statushslcso: item.statushslcso,
                             gradeid: item.grade,
                             trsdet: item.trsdetid
                         })}
@@ -55,7 +54,7 @@ export default Card = ({
                                                 </Text>
                                         }
                                         {
-                                            item.csocount > 1 ?
+                                            item.keterangan ?
                                             item.keterangan.split(',').map(element => 
                                                 <Text style={{ color: "#d98a02" }}>
                                                     <Ionicons name="information" size={15} color="#d98a02" /> {element}
