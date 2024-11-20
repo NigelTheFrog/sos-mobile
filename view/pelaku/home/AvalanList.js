@@ -19,17 +19,59 @@ export default function AvalanList({ navigation }) {
   const [csoActive, setCsoActive] = React.useState(false);
   const displayDataAvalan = () => HomeController.displayData('daftar-avalan', storedCredentials[0], storedCredentials[5], setListData)
   const checkCsoActive = () => HomeController.checkCsoActive('check-status-cso-avalan', storedCredentials[0], setCsoActive, setTrsId)
+  const [statusSubmit, setStatusSubmit] = React.useState('0');
+  const [statusData] = React.useState([
+    {
+        value: '0',
+        label: 'Semua',
+    },
+    {
+        value: 'P',
+        label: 'Sudah Submit',
+    },
+    {
+        value: 'D',
+        label: 'Belum Submit',
+    }
+]);
 
   let interval1, interval2;
 
   function search(text) {
     setSearchItem(text);
     let tempItem = [];
-    listData.forEach(item => {
-      if (item.itemid.toString().includes(text) || item.itemname.toLowerCase().includes(text.toLowerCase())) tempItem.push(item)
-    });
+    if (statusSubmit != '0') {
+        listData.forEach(item => {
+            if ((item.itemid.toString().includes(text) || item.itemname.toLowerCase().includes(text.toLowerCase())) && item.statussubmit == statusSubmit) tempItem.push(item)
+        });
+    } else {
+        listData.forEach(item => {
+            if (item.itemid.toString().includes(text) || item.itemname.toLowerCase().includes(text.toLowerCase())) tempItem.push(item)
+        });
+    }
     setListSearchedData(tempItem);
-  }
+}
+
+function filterStatus(status) {
+    setStatusSubmit(status.value);
+    let tempItem = [];
+    if (searchItem != '') {
+        if (status.value == '0') {
+            listData.forEach(item => {
+                if (item.itemid.toString().includes(searchItem) || item.itemname.toLowerCase().includes(searchItem.toLowerCase())) tempItem.push(item)
+            });
+        } else {
+            listData.forEach(item => {
+                if ((item.itemid.toString().includes(searchItem) || item.itemname.toLowerCase().includes(searchItem.toLowerCase())) && item.statussubmit == status.value) tempItem.push(item)
+            });
+        }
+    } else {
+        listData.forEach(item => {
+            if (item.statussubmit == status.value) tempItem.push(item)
+        });
+    }
+    setListSearchedData(tempItem);
+}
 
   useFocusEffect(
     React.useCallback(() => {
@@ -68,16 +110,33 @@ export default function AvalanList({ navigation }) {
     } else {
       return (
         <View style={styles.styledContainer}>
-          <Input
-            groupStyle={styles.formGroup}
-            labelStyle={styles.formGroupLabel}
-            label={<Ionicons name="search" size={20} color="black" />}
-            textInputStyle={styles.formGroupNamaItem}
-            statusEditable={true}
-            value={searchItem}
-            setter={search}
-            placeHolder='Cari Daftar Avalan CSO'
-          />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Input
+              groupStyle={[styles.formGroup, { width: '50%' }]}
+              labelStyle={styles.formGroupLabel}
+              label={<Ionicons name="search" size={20} color="black" />}
+              textInputStyle={[styles.formGroupNamaItem, { fontSize: 12 }]}
+              placeHolderStyle={{ fontSize: 8 }}
+              statusEditable={true}
+              value={searchItem}
+              setter={search}
+              placeHolder='Cari Daftar Avalan CSO'
+            />
+            <Dropdownitem
+              groupStyle={[styles.formGroup, { width: '45%', marginLeft: 10 }]}
+              labelStyle={styles.formGroupLabel}
+              itemStyle={{ fontSize: 12 }}
+              textLabelStyle={{ fontSize: 11 }}
+              label='Status'
+              dropdownStyle={[styles.formGroupInput, { width: '75%' }]}
+              data={statusData}
+              setFocus={setIsFocus}
+              valueField="value"
+              value={statusSubmit}
+              searchable={false}
+              setter={filterStatus}
+            />
+          </View>
           <ProcessButton
             buttonStyle={styles.buttonTambahItem}
             onButtonPressed={() => navigation.navigate("TambahAvalan")}
