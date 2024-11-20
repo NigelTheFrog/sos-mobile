@@ -5,7 +5,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 export default Dropdownitem = ({
     label,
     placeHolder,
-    searchable,
+    searchable,    
     setter,
     value,
     data,
@@ -15,15 +15,19 @@ export default Dropdownitem = ({
     setFocus,
     placeHolderStyle,
     searchPlaceholder,
-    valueField
+    valueField,
+    onChangeSearch,
+    itemStyle,
+    textLabelStyle
 }) => (
     <>
         <View style={groupStyle}>
           <View style={labelStyle}>
-            <Text>{label ?? ''}</Text>
+            <Text style={textLabelStyle}>{label ?? ''}</Text>
           </View>
           <Dropdown
             style={dropdownStyle}
+            selectedTextStyle={itemStyle}
             data={data}
             selectedTextProps={{ numberOfLines: 1 }}
             maxHeight={300}
@@ -37,6 +41,7 @@ export default Dropdownitem = ({
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             onChange={setter}
+            onChangeText={onChangeSearch}
           />
         </View>
         

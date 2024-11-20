@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Dimensions } from 'react-native';
 import * as React from 'react';
 import { Colors, styles } from '../../assets/styles/style';
 import { Formik } from 'formik';
@@ -9,6 +9,7 @@ import Input from '../component/input';
 import ProcessButton from '../component/processButton';
 import request from "../../request";
 import Dropdownitem from '../component/dropdownitem';
+import {MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 
@@ -37,6 +38,10 @@ export default function LoginScreen({ navigation }) {
     { value: 'http://pmisby.sos.sutindo.net:8056', label: 'PMI SBY' },
     { value: 'http://pstjktb.sos.sutindo.net:8056', label: 'PST JKTB' },
     { value: 'http://pstjktr.sos.sutindo.net:8056', label: 'PST JKTR' },
+    { value: 'http://pstjktbb.sos.sutindo.net:8056', label: 'PST JKT BALARAJA B' },
+    { value: 'http://pstjktbr.sos.sutindo.net:8056', label: 'PST JKT BALARAJA R' },
+    { value: 'http://pstjktib.sos.sutindo.net:8056', label: 'PST JKT INDOMETAL B' },
+    { value: 'http://pstjktir.sos.sutindo.net:8056', label: 'PST JKT INDOMETAL R' },
     { value: 'http://pstpku.sos.sutindo.net:8056', label: 'PST PKU' },
     { value: 'http://pstpnk.sos.sutindo.net:8056', label: 'PST PNK' },
     { value: 'http://pstpst.sos.sutindo.net:8056', label: 'PST PST' },
@@ -52,6 +57,7 @@ export default function LoginScreen({ navigation }) {
     { value: 'http://srmjkt.sos.sutindo.net:8056', label: 'SRM JKT' },
     { value: 'http://srmsby.sos.sutindo.net:8056', label: 'SRM SBY' },
     { value: 'http://srmsmg.sos.sutindo.net:8056', label: 'SRM SMG' },
+    { value: 'http://srmsmgs.sos.sutindo.net:8056', label: 'SRM SMGS' },
     { value: 'http://ssosby.sos.sutindo.net:8056', label: 'SSO SBY' },
     { value: 'http://ssosmd.sos.sutindo.net:8056', label: 'SSO SMD' },
     { value: 'http://sssjkt.sos.sutindo.net:8056', label: 'SSS JKT' },
@@ -65,6 +71,7 @@ export default function LoginScreen({ navigation }) {
   ]);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(true);
   const persistLogin = (credentials, message, status) => {
     // console.log(credentials);
     AsyncStorage.setItem('sosCredentials', JSON.stringify(credentials))
@@ -128,12 +135,22 @@ export default function LoginScreen({ navigation }) {
               <Input
                 labelStyle={styles.textInputLabel}
                 label='Password'
-                textInputStyle={styles.textInput}
+                textInputStyle={[styles.textInput,{width: '90%'}]}
                 autoCapitalize='none'
                 setter={setPassword}
                 placeHolder="Isikan Password Anda"
                 value={password}
-                secureText={true}
+                secureText={showPassword}  
+                isPassword={true}              
+                showPassword={
+                  <MaterialCommunityIcons
+                    name={showPassword ? 'eye-off' : 'eye'}
+                    size={22}
+                    style={{marginLeft: 5}}
+                    color="#aaa"
+                    onPress={() => setShowPassword(!showPassword)}
+                />
+                }
               />
 
               <ProcessButton

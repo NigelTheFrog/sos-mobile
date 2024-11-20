@@ -47,8 +47,21 @@ export default function AddItem({ navigation }) {
   const [csoDet2Id, setCsoDet2Id] = useState('');
   const [resultCalc, setResultCalc] = useState('');
 
+  const [searchItem, setSearchItem] = useState('');
+  const [filteredDataItem, setFilteredDataItem] = useState([]);
+
+  function filter(text) {
+    setSearchItem(text);
+    let tempItem = [];
+    itemData.forEach(item => {
+      if (item.label.toLowerCase().includes(text.toLowerCase())) tempItem.push(item)
+    });
+    setFilteredDataItem(tempItem);
+  }
+
+
   useEffect(() => {
-    ProcessController.setData('item-list', "itemid", "itemname", setItemData, 1);    
+    ProcessController.setData('item-list', "itemid", "itemname", setItemData, 1);
     ProcessController.setData('location-list', "locationid", "locationname", setLokasiData, 0);
     ProcessController.setData('color-list', "colorid", "colordesc", setWarnaData, 0);
   }, []);
@@ -79,7 +92,7 @@ export default function AddItem({ navigation }) {
           labelStyle={styles.formGroupLabel}
           label='Item'
           dropdownStyle={styles.formGroupInput}
-          data={itemData}
+          data={searchItem === '' ? itemData : filteredDataItem}
           placeHolder="--Pilih Item--"
           placeHolderStyle={styles.formGroupPlaceHolderStyle}
           setFocus={setIsFocus}
@@ -92,6 +105,7 @@ export default function AddItem({ navigation }) {
             setTrsDetId(item.trsdetid);
             setIsFocus(false);
           }}
+          onChangeSearch={filter}
         />
         <Dropdownitem
           groupStyle={styles.formGroup}

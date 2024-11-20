@@ -12,6 +12,8 @@ import Card from '../../component/card';
 export default function AvalanList({ navigation }) {
   const { storedCredentials, setStoredCredentials } = React.useContext(CredentialContext);
   const [listData, setListData] = React.useState([]);
+  const [listSearchedData, setListSearchedData] = React.useState([]);
+  const [searchItem, setSearchItem] = React.useState('');
   const [trsId, setTrsId] = React.useState(0);
   const [csoId, setCsoId] = React.useState(0);
   const [csoActive, setCsoActive] = React.useState(false);
@@ -19,6 +21,15 @@ export default function AvalanList({ navigation }) {
   const checkCsoActive = () => HomeController.checkCsoActive('check-status-cso-avalan', storedCredentials[0], setCsoActive, setTrsId)
 
   let interval1, interval2;
+
+  function search(text) {
+    setSearchItem(text);
+    let tempItem = [];
+    listData.forEach(item => {
+      if (item.itemid.toString().includes(text) || item.itemname.toLowerCase().includes(text.toLowerCase())) tempItem.push(item)
+    });
+    setListSearchedData(tempItem);
+  }
 
   useFocusEffect(
     React.useCallback(() => {
@@ -57,6 +68,16 @@ export default function AvalanList({ navigation }) {
     } else {
       return (
         <View style={styles.styledContainer}>
+          <Input
+            groupStyle={styles.formGroup}
+            labelStyle={styles.formGroupLabel}
+            label={<Ionicons name="search" size={20} color="black" />}
+            textInputStyle={styles.formGroupNamaItem}
+            statusEditable={true}
+            value={searchItem}
+            setter={search}
+            placeHolder='Cari Daftar Avalan CSO'
+          />
           <ProcessButton
             buttonStyle={styles.buttonTambahItem}
             onButtonPressed={() => navigation.navigate("TambahAvalan")}
@@ -65,7 +86,7 @@ export default function AvalanList({ navigation }) {
 
           <ScrollView>
             <Card
-              data={listData}
+              data={searchItem ? listSearchedData : listData}
               navigation={navigation}
               type='A'
               userType={0}

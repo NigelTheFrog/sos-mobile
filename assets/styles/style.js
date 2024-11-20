@@ -233,7 +233,7 @@ export const styles = StyleSheet.create({
         borderBottomLeftRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
-        width: 80,
+        width: 80,        
         flex: 1,
     },
     formGroupPlaceHolderStyle: {
