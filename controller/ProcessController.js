@@ -131,6 +131,7 @@ class ProcessController {
             remark: data[5],
             grade: data[6],
             trsdetid: data[7],
+            tonasecso: data[8],
             username: credentialData[0],
             csoid: credentialData[1],
             csodetid: csoDetId[0],

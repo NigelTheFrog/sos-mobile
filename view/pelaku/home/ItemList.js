@@ -41,7 +41,7 @@ export default function ItemList({ navigation }) {
 
     let interval1, interval2;
     // console.log(listData);
-    // console.log(storedCredentials);
+    // console.log(storedCredentials[11]);
 
     function search(text) {
         setSearchItem(text);
@@ -153,6 +153,7 @@ export default function ItemList({ navigation }) {
                             navigation={navigation}
                             type='R'
                             userType={0}
+                            coy={storedCredentials[11]}
                         />
                     </ScrollView>
                     <ProcessButton

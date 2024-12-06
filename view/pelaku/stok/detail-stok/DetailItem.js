@@ -14,25 +14,25 @@ import DetailController from '../../../../controller/DetailController';
 export default function DetailItem({ route, navigation }) {
     const { csodetid, csodet2id, itemname, statusitem, statushslcso,
         itemid, trsdet, itembatchid, qty, historylist, location,
-        inputlist, statussubmit } = route.params;
+        inputlist, statussubmit, tonase } = route.params;
     const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
     const [itemData, setItemData] = useState([]);
     const [lokasiData, setLokasiData] = useState([]);
     const [warnaData, setWarnaData] = useState([]);
     const [gradeData] = useState([
         {
-          value: 1,
-          label: 'Grade 1',
+            value: 1,
+            label: 'Grade 1',
         },
         {
-          value: 2,
-          label: 'Grade 2',
+            value: 2,
+            label: 'Grade 2',
         },
         {
-          value: 3,
-          label: 'Grade 3',
+            value: 3,
+            label: 'Grade 3',
         }
-      ]);
+    ]);
     const [item, setItem] = useState(itemid);
     const [itemBatch, setItemBatch] = useState(itembatchid);
     const [itemName, setItemName] = useState(itemname);
@@ -50,6 +50,7 @@ export default function DetailItem({ route, navigation }) {
     const [csoDetId, setCsoDetId] = useState(csodetid);
     const [csoDet2Id, setCsoDet2Id] = useState(csodet2id);
     const [resultCalc, setResultCalc] = useState(qty);
+    const [tonaseQty, setTonaseQty] = useState(tonase);
     const [itemType, setItemType] = useState(statusitem);
 
     useEffect(() => {
@@ -182,13 +183,25 @@ export default function DetailItem({ route, navigation }) {
                         />
                     }
                 />
+                {
+                    storedCredentials[11] == 'KKS' ?
+                        <Input
+                            groupStyle={styles.formGroup}
+                            labelStyle={styles.formGroupLabel}
+                            label='Tonase'
+                            textInputStyle={styles.formGroupNamaItem}
+                            value={tonaseQty}
+                            setter={setTonaseQty}
+                        /> : null
+                }
+
                 <Input
                     groupStyle={styles.formGroupKeterangan}
                     labelStyle={styles.formGroupLabel}
                     label='Ket.'
                     textInputStyle={styles.formKeterangan}
-                    setter={onChangeKeterangan}
                     value={keterangan}
+                    setter={onChangeKeterangan}
                 />
                 {statussubmit == "D" ?
                     <ProcessButton

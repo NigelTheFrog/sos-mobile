@@ -46,18 +46,20 @@ export default function AddItem({ navigation }) {
   const [csoDetId, setCsoDetId] = useState('');
   const [csoDet2Id, setCsoDet2Id] = useState('');
   const [resultCalc, setResultCalc] = useState('');
+  const [tonaseQty, setTonaseQty] = useState(null);
 
   const [searchItem, setSearchItem] = useState('');
   const [filteredDataItem, setFilteredDataItem] = useState([]);
-
-  function filter(text) {
-    setSearchItem(text);
-    let tempItem = [];
-    itemData.forEach(item => {
-      if (item.label.toLowerCase().includes(text.toLowerCase())) tempItem.push(item)
-    });
-    setFilteredDataItem(tempItem);
-  }
+  // console.log(storedCredentials[11]);
+  // function filter(text) {
+  //   console.log(text);
+  //   setSearchItem(text);
+  //   let tempItem = [];
+  //   itemData.forEach(item => {
+  //     if (item.label.toLowerCase().includes(text.toLowerCase())) tempItem.push(item)
+  //   });
+  //   if (tempItem) setFilteredDataItem(tempItem);
+  // }
 
 
   useEffect(() => {
@@ -92,7 +94,7 @@ export default function AddItem({ navigation }) {
           labelStyle={styles.formGroupLabel}
           label='Item'
           dropdownStyle={styles.formGroupInput}
-          data={searchItem === '' ? itemData : filteredDataItem}
+          data={itemData}
           placeHolder="--Pilih Item--"
           placeHolderStyle={styles.formGroupPlaceHolderStyle}
           setFocus={setIsFocus}
@@ -105,7 +107,6 @@ export default function AddItem({ navigation }) {
             setTrsDetId(item.trsdetid);
             setIsFocus(false);
           }}
-          onChangeSearch={filter}
         />
         <Dropdownitem
           groupStyle={styles.formGroup}
@@ -183,21 +184,34 @@ export default function AddItem({ navigation }) {
             />
           }
         />
-        <Input
-          groupStyle={styles.formGroupKeterangan}
-          labelStyle={styles.formGroupLabel}
-          label='Ket.'
-          textInputStyle={styles.formKeterangan}
-          value={keterangan}
-          setter={onChangeKeterangan}
-        />
+        {
+          storedCredentials[11] == 'KKS' ?
+            <Input
+              groupStyle={styles.formGroup}
+              labelStyle={styles.formGroupLabel}
+              label='Tonase'
+              textInputStyle={styles.formGroupNamaItem}
+              value={tonaseQty}
+              setter={setTonaseQty}
+            /> : null
+        }
+   
+            <Input
+              groupStyle={styles.formGroupKeterangan}
+              labelStyle={styles.formGroupLabel}
+              label='Ket.'
+              textInputStyle={styles.formKeterangan}
+              value={keterangan}
+              setter={onChangeKeterangan}
+            /> 
+
         <ProcessButton
           buttonStyle={styles.buttonSubmit}
           onButtonPressed={
             () => ProcessController.addItem(
               [csoDetId, csoDet2Id],
               [storedCredentials[0], storedCredentials[3]],
-              [item, itemBatchId, lokasi, resultCalc, warna, keterangan, grade, trsdetid],
+              [item, itemBatchId, lokasi, resultCalc, warna, keterangan, grade, trsdetid, tonaseQty],
               'R',
               navigation
             )

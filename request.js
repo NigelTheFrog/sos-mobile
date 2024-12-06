@@ -52,7 +52,8 @@ class Request {
                             responseData['trsidavalan'],
                             responseData['token'],
                             responseData['type'],
-                            `${credential[2]}/api`
+                            `${credential[2]}/api`,
+                            responseData['coy'],
                         ]);
                     } else {
                         Alert.alert('Login Gagal', 'Pastikan Username atau Password anda benar', [

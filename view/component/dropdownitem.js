@@ -18,7 +18,8 @@ export default Dropdownitem = ({
     valueField,
     onChangeSearch,
     itemStyle,
-    textLabelStyle
+    textLabelStyle,
+    // querySearch
 }) => (
     <>
         <View style={groupStyle}>
@@ -41,7 +42,8 @@ export default Dropdownitem = ({
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             onChange={setter}
-            onChangeText={onChangeSearch}
+            searchQuery={onChangeSearch}
+            // searchQuery={querySearch}
           />
         </View>
         

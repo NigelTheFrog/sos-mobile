@@ -7,7 +7,8 @@ export default Card = ({
     data,
     navigation,
     type,
-    userType // 0 = pelaku, 1 = analisator
+    userType,
+    coy // 0 = pelaku, 1 = analisator
 }) => (    
     <>
         <View style={styles.cardContainer}>
@@ -31,7 +32,8 @@ export default Card = ({
                             statussubmit: item.statussubmit,
                             statushslcso: item.statushslcso,
                             gradeid: item.grade,
-                            trsdet: item.trsdetid
+                            trsdet: item.trsdetid,
+                            tonase: coy == 'KKS' ? item.tonase : null
                         })}
                         additionalComponent={
                             userType == 0 ?

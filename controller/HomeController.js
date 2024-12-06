@@ -26,7 +26,8 @@ class HomeController {
                         credentialData[7],
                         credentialData[8],
                         credentialData[9],
-                        credentialData[10]
+                        credentialData[10],
+                        credentialData[11],
                     ];
                 } else {
                     storedData = [
@@ -40,7 +41,8 @@ class HomeController {
                         responseData['trsid'],
                         credentialData[8],
                         credentialData[9],
-                        credentialData[10]
+                        credentialData[10],
+                        credentialData[11],
                     ];
                 }
                 AsyncStorage.setItem('sosCredentials', JSON.stringify(storedData))
