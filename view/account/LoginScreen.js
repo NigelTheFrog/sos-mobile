@@ -10,6 +10,7 @@ import ProcessButton from '../component/processButton';
 import request from "../../request";
 import Dropdownitem from '../component/dropdownitem';
 import {MaterialCommunityIcons } from '@expo/vector-icons';
+import { AppVersion } from '../../Credentials';
 
 
 
@@ -27,6 +28,9 @@ export default function LoginScreen({ navigation }) {
     { value: 'http://aerjkt.sos.sutindo.net:8056', label: 'AER JKT' },
     { value: 'http://aersby.sos.sutindo.net:8056', label: 'AER SBY' },
     { value: 'http://aersmg.sos.sutindo.net:8056', label: 'AER SMG' },
+    { value: 'http://aerpcm.sos.sutindo.net:8056', label: 'AER SHOWROOM PCM' },
+    { value: 'http://aerptc.sos.sutindo.net:8056', label: 'AER SHOWROOM PTC' },
+    { value: 'http://aerpma.sos.sutindo.net:8056', label: 'AER SHOWROOM PMA' },
     { value: 'http://bas.sos.sutindo.net:8056', label: 'BAS' },
     { value: 'http://fasmlg.sos.sutindo.net:8056', label: 'FAS MLG' },
     { value: 'http://gcijkt.sos.sutindo.net:8056', label: 'GCI JKT' },
@@ -42,10 +46,11 @@ export default function LoginScreen({ navigation }) {
     { value: 'http://pstjktbr.sos.sutindo.net:8056', label: 'PST JKT BALARAJA R' },
     { value: 'http://pstjktib.sos.sutindo.net:8056', label: 'PST JKT INDOMETAL B' },
     { value: 'http://pstjktir.sos.sutindo.net:8056', label: 'PST JKT INDOMETAL R' },
+    { value: 'http://pstpkutko.sos.sutindo.net:8056', label: 'PST PEKANBARU TOKO' },
     { value: 'http://pstpku.sos.sutindo.net:8056', label: 'PST PKU' },
     { value: 'http://pstpnk.sos.sutindo.net:8056', label: 'PST PNK' },
     { value: 'http://pstpst.sos.sutindo.net:8056', label: 'PST PST' },
-    { value: 'http://pstsby.sos.sutindo.net:8056', label: 'PST SBY' },
+    { value: 'http://pstsby.sos.sutindo.net:8056', label: 'PST SBY' },    
     { value: 'http://rra.sos.sutindo.net:8056', label: 'RRA' },
     { value: 'http://rrapg24.sos.sutindo.net:8056', label: 'RRA PEGIRIAN 24' },
     { value: 'http://rrapg38.sos.sutindo.net:8056', label: 'RRA PEGIRIAN 38' },
@@ -67,14 +72,11 @@ export default function LoginScreen({ navigation }) {
     { value: 'http://sssjkt.sos.sutindo.net:8056', label: 'SSS JKT' },
     { value: 'http://ssssby.sos.sutindo.net:8056', label: 'SSS SBY' },
     { value: 'http://stinox.sos.sutindo.net:8056', label: 'STINOX' },
-    { value: 'http://aerpcm.sos.sutindo.net:8056', label: 'AER SHOWROOM PCM' },
-    { value: 'http://aerptc.sos.sutindo.net:8056', label: 'AER SHOWROOM PTC' },
-    { value: 'http://aerpma.sos.sutindo.net:8056', label: 'AER SHOWROOM PMA' },
-    { value: 'http://trial.sos.sutindo.net:8056', label: 'TRIAL' },
-    { value: 'http://dev.sos.sutindo.net:8056', label: 'DEV' },
-    { value: 'http://devrtg.sos.sutindo.net:8056', label: 'DEV REALTING' },
-    { value: 'http://devsap.sos.sutindo.net:8056', label: 'DEV SAP' },
-    { value: 'http://192.168.100.147:8000', label: 'DEV LOCAL NIGEL' }    
+    // { value: 'http://trial.sos.sutindo.net:8056', label: 'TRIAL' },
+    // { value: 'http://dev.sos.sutindo.net:8056', label: 'DEV' },
+    // { value: 'http://devrtg.sos.sutindo.net:8056', label: 'DEV REALTING' },
+    // { value: 'http://devsap.sos.sutindo.net:8056', label: 'DEV SAP' },
+    // { value: 'http://192.168.100.147:8000', label: 'DEV LOCAL NIGEL' }    
   ]);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -165,6 +167,7 @@ export default function LoginScreen({ navigation }) {
                 onButtonPressed={handleLogin}
                 additionalComponent={<Text style={styles.buttonAccountText}>Login</Text>}
               />
+              <Text style={styles.appVersionLabel}>Version {AppVersion}</Text>
             </View>
             {/* )} */}
             {/* </Formik> */}
