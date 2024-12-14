@@ -323,6 +323,12 @@ export const styles = StyleSheet.create({
         width: 175,
         height: 225,
     },
+    appVersionLabel: {
+        color:Colors.darkGrey,
+        marginTop: 10,
+        textAlign: 'center',
+        fontSize: 11
+    },
     modalView: {
         backgroundColor: 'white',
         borderRadius: 20,
