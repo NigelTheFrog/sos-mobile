@@ -19,9 +19,8 @@ export default function ItemList({ navigation }) {
     const [csoActive, setCsoActive] = React.useState(false);
     const [searchItem, setSearchItem] = React.useState('');
     const [trsId, setTrsId] = React.useState(0);
-    const [csoId, setCsoId] = React.useState(0);
     const displayDataItem = () => HomeController.displayData('daftar-item', storedCredentials[0], storedCredentials[3], setListData)
-    const checkCsoActive = () => HomeController.checkCsoActive('check-status-cso-item', storedCredentials[0], setCsoActive, setTrsId)
+    const checkCsoActive = () => HomeController.checkCsoActive('check-status-cso-item', storedCredentials[0], setCsoActive, setTrsId, 'CSO')
     const [isFocus, setIsFocus] = React.useState(false);
     const [statusSubmit, setStatusSubmit] = React.useState('0');
     const [statusData] = React.useState([

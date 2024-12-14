@@ -31,7 +31,7 @@ export default Card = ({
                             statusitem: item.statusitem,
                             statussubmit: item.statussubmit,
                             statushslcso: item.statushslcso,
-                            gradeid: item.grade,
+                            gradeid: Number.parseInt(item.grade),
                             trsdet: item.trsdetid,
                             tonase: coy == 'KKS' ? item.tonase : null
                         })}
