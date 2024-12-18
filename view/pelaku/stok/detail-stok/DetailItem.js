@@ -211,7 +211,7 @@ export default function DetailItem({ route, navigation }) {
                             () => DetailController.updateItem(
                                 [csoDetId, csoDet2Id],
                                 [storedCredentials[0], storedCredentials[3]],
-                                [item, itemBatch, lokasi, resultCalc, warna, keterangan, grade, trsdetid],
+                                [item, itemBatch, lokasi, resultCalc, warna, keterangan, grade, trsdetid, tonaseQty],
                                 'R',
                                 navigation.navigate("HomeItem")
                             )
