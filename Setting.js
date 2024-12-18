@@ -2,7 +2,7 @@ import { View, Text, Alert } from 'react-native';
 import { useState, useContext } from 'react';
 import { styles } from './assets/styles/style';
 import AvoidingWrapper from './assets/styles/avoidingWrapper';
-import { CredentialContext, BaseURL } from './Credentials';
+import { CredentialContext, BaseURL, AppVersion } from './Credentials';
 import Input from './view/component/input';
 import ProcessButton from './view/component/processButton';
 import request from './request';
@@ -93,6 +93,7 @@ export default function Setting() {
           }}
           additionalComponent={<Text style={styles.buttonAccountText}>Simpan</Text>}
         />
+        <Text style={styles.appVersionLabel}>Version {AppVersion}</Text>
       </View>
     </AvoidingWrapper>
   )
