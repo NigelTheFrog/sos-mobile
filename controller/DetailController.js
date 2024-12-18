@@ -17,45 +17,45 @@ class DetailController {
         });
     }
 
-    showCalculator(csoDetId, credentialData, data, setter, isModalVisible) {
-        if (data[0] == null) {
-            Alert.alert('Proses Gagal', 'Anda belum memilih item', [
-                { text: 'OK' },
-            ]);
-        } else if (data[2] == null) {
-            Alert.alert('Proses Gagal', 'Anda belum memilih lokasi', [
-                { text: 'OK' },
-            ]);
-        } else if (data[3].length == null) {
-            Alert.alert('Proses Gagal', 'Anda belum memilih warna', [
-                { text: 'OK' },
-            ]);
-        } else {
-            if (csoDetId[0] == "" && csoDetId[1] == "") {
-                request.post('tambah-perhitungan', {
-                    username: credentialData[0],
-                    csoid: credentialData[1],
-                    itemid: data[0],
-                    itembatchid: data[1],
-                    lokasi: data[2],
-                    color: data[3],
-                    statusItem: data[4]
-                }).then((responseData) => {
-                    if (responseData['result'] == 1) {
-                        setter[0](responseData['csodetid']);
-                        setter[1](responseData['csodet2id']);
-                        setter[2](!isModalVisible);
-                    } else {
-                        Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan tekan tombol "Hitung" ulang', [
-                            { text: 'OK' },
-                        ]);
-                    }
-                });
-            } else {
-                setter[2](!isModalVisible);
-            }
-        }
-    }
+    // showCalculator(csoDetId, credentialData, data, setter, isModalVisible) {
+    //     if (data[0] == null) {
+    //         Alert.alert('Proses Gagal', 'Anda belum memilih item', [
+    //             { text: 'OK' },
+    //         ]);
+    //     } else if (data[2] == null) {
+    //         Alert.alert('Proses Gagal', 'Anda belum memilih lokasi', [
+    //             { text: 'OK' },
+    //         ]);
+    //     } else if (data[3].length == null) {
+    //         Alert.alert('Proses Gagal', 'Anda belum memilih warna', [
+    //             { text: 'OK' },
+    //         ]);
+    //     } else {
+    //         if (csoDetId[0] == "" && csoDetId[1] == "") {
+    //             request.post('tambah-perhitungan', {
+    //                 username: credentialData[0],
+    //                 csoid: credentialData[1],
+    //                 itemid: data[0],
+    //                 itembatchid: data[1],
+    //                 lokasi: data[2],
+    //                 color: data[3],
+    //                 statusItem: data[4]
+    //             }).then((responseData) => {
+    //                 if (responseData['result'] == 1) {
+    //                     setter[0](responseData['csodetid']);
+    //                     setter[1](responseData['csodet2id']);
+    //                     setter[2](!isModalVisible);
+    //                 } else {
+    //                     Alert.alert('Proses Gagal', 'Harap periksa koneksi internet anda dan tekan tombol "Hitung" ulang', [
+    //                         { text: 'OK' },
+    //                     ]);
+    //                 }
+    //             });
+    //         } else {
+    //             setter[2](!isModalVisible);
+    //         }
+    //     }
+    // }
 
     submitPerhitungan(csoDet2Id, tempInput, history, input, setter) {
         if (history != '') {
@@ -115,7 +115,8 @@ class DetailController {
             csodet2id: csodetid[1],
             statusItem: type,
             grade: data[6],
-            trsdetid: data[7]
+            trsdetid: data[7],
+            tonasecso: data[8]
         } : {
             itemid: data[0],
             temuanname: data[1],
@@ -129,7 +130,8 @@ class DetailController {
             csodet2id: csodetid[1],
             statusItem: type,
             grade: data[6],
-            trsdetid: data[7]
+            trsdetid: data[7],
+            tonasecso: data[8]
         })
             .then((responseData) => {
                 if (responseData['result'] == 1) {
