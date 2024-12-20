@@ -8,6 +8,8 @@ export default Card = ({
     navigation,
     type,
     userType,
+    trsid,
+    csoid,
     coy // 0 = pelaku, 1 = analisator
 }) => (    
     <>
@@ -17,6 +19,7 @@ export default Card = ({
                     <ProcessButton
                         buttonStyle={[styles.card, { backgroundColor: item.csocount == 1 ? '#b7e1cd' : item.csocount == 2 ? '#fce8b2' : '#f4c7c3' }]}
                         onButtonPressed={() => navigation.navigate(type == 'R' ? "DetailItem" : "DetailAvalan", {
+                            csoid: csoid,
                             csodetid: item.csodetid,
                             csodet2id: item.csodet2id,
                             color: item.color == null ? [] : item.color.split(','),
@@ -32,6 +35,7 @@ export default Card = ({
                             statussubmit: item.statussubmit,
                             statushslcso: item.statushslcso,
                             gradeid: Number.parseInt(item.grade),
+                            trsid: trsid,
                             trsdet: item.trsdetid,
                             tonase: coy == 'KKS' ? item.tonase : null
                         })}

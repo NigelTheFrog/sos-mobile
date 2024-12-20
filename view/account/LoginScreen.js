@@ -73,11 +73,11 @@ export default function LoginScreen({ navigation }) {
     { value: 'http://sssjkt.sos.sutindo.net:8056', label: 'SSS JKT' },
     { value: 'http://ssssby.sos.sutindo.net:8056', label: 'SSS SBY' },
     { value: 'http://stinox.sos.sutindo.net:8056', label: 'STINOX' },
-    // { value: 'http://trial.sos.sutindo.net:8056', label: 'TRIAL' },
-    // { value: 'http://dev.sos.sutindo.net:8056', label: 'DEV' },
-    // { value: 'http://devrtg.sos.sutindo.net:8056', label: 'DEV REALTING' },
-    // { value: 'http://devsap.sos.sutindo.net:8056', label: 'DEV SAP' },
-    // { value: 'http://192.168.100.147:8000', label: 'DEV LOCAL NIGEL' }    
+    { value: 'http://trial.sos.sutindo.net:8056', label: 'TRIAL' },
+    { value: 'http://dev.sos.sutindo.net:8056', label: 'DEV' },
+    { value: 'http://devrtg.sos.sutindo.net:8056', label: 'DEV REALTING' },
+    { value: 'http://devsap.sos.sutindo.net:8056', label: 'DEV SAP' },
+    { value: 'http://192.168.100.147:8000', label: 'DEV LOCAL NIGEL' }    
   ]);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
