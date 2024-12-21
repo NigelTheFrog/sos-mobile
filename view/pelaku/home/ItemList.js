@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import * as React from 'react';
 import { styles } from '../../../assets/styles/style';
-import { CredentialContext } from '../../../Credentials';
+import { AppVersion, CredentialContext } from '../../../Credentials';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import HomeController from '../../../controller/HomeController';
 import ProcessButton from '../../component/processButton';
@@ -12,7 +12,7 @@ import Dropdownitem from '../../component/dropdownitem';
 
 
 
-export default function ItemList({ navigation }) {
+export default function ItemList({ route,navigation }) {
     const { storedCredentials, setStoredCredentials } = React.useContext(CredentialContext);
     const [listData, setListData] = React.useState([]);
     const [listSearchedData, setListSearchedData] = React.useState([]);
@@ -39,7 +39,7 @@ export default function ItemList({ navigation }) {
     ]);
 
     let interval1, interval2;
-    // console.log(listData);
+    // console.log(route);
     // console.log(storedCredentials[11]);
 
     function search(text) {
@@ -106,7 +106,7 @@ export default function ItemList({ navigation }) {
                     </Text>
                     <ProcessButton
                         buttonStyle={styles.buttonMulaiCSO}
-                        onButtonPressed={() => HomeController.startCSO('mulai-cso-item', storedCredentials, 'R', setStoredCredentials)}
+                        onButtonPressed={() => HomeController.startCSO('mulai-cso-item', storedCredentials, 'R', setStoredCredentials, 'CSO')}
                         additionalComponent={<Text style={styles.buttonAccountText}>Mulai CSO</Text>}
                     />
                 </View>
@@ -143,7 +143,7 @@ export default function ItemList({ navigation }) {
                     </View>
                     <ProcessButton
                         buttonStyle={styles.buttonTambahItem}
-                        onButtonPressed={() => navigation.navigate("TambahItem")}
+                        onButtonPressed={() => navigation.navigate("TambahItem", { trsid: trsId, csoid: storedCredentials[3] })}
                         additionalComponent={<Text style={styles.buttonTambahItemText}><Ionicons name="add" size={15} color="white" /> Tambah Item</Text>}
                     />
                     <ScrollView>
@@ -153,6 +153,8 @@ export default function ItemList({ navigation }) {
                             type='R'
                             userType={0}
                             coy={storedCredentials[11]}
+                            trsid={trsId}
+                            csoid={storedCredentials[3]}
                         />
                     </ScrollView>
                     <ProcessButton
@@ -160,7 +162,9 @@ export default function ItemList({ navigation }) {
                         onButtonPressed={() => HomeController.submitItem(storedCredentials[3], setListData)}
                         additionalComponent={<Text style={styles.buttonAccountText}>Submit</Text>}
                     />
+                    <Text style={styles.appVersionLabel}>Version {AppVersion}</Text>
                 </View>
+                
             )
         }
     }

@@ -54,6 +54,10 @@ class Request {
                             responseData['type'],
                             `${credential[2]}/api`,
                             responseData['coy'],
+                            responseData['cssiditem'],
+                            responseData['trscssiditem'],
+                            responseData['cssidavalan'],
+                            responseData['trscssidavalan'],
                         ]);
                     } else {
                         Alert.alert('Login Gagal', 'Pastikan Username atau Password anda benar', [
@@ -91,7 +95,7 @@ class Request {
                 accept: 'application/json',
                 'content-type': 'application/json',
                 authorization: `${value[9]} ${value[8]}`
-            }
+            },
         };
         return fetch(`${value[10]}/${route}`, payload).then((response) => response.json());
     }

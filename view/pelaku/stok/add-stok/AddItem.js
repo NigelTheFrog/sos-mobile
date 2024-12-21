@@ -2,7 +2,7 @@ import { View, Text } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { styles } from '../../../../assets/styles/style';
 import AvoidingWrapper from '../../../../assets/styles/avoidingWrapper';
-import { CredentialContext } from '../../../../Credentials';
+import { AppVersion, CredentialContext } from '../../../../Credentials';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Calculator from '../../../component/calculator';
 import Dropdownitem from '../../../component/dropdownitem';
@@ -11,8 +11,9 @@ import Input from '../../../component/input';
 import ProcessButton from '../../../component/processButton';
 import ProcessController from '../../../../controller/ProcessController';
 
-export default function AddItem({ navigation }) {
-  const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
+export default function AddItem({ route, navigation }) {
+  const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);  
+  const { trsid, csoid } = route.params;
   const [itemData, setItemData] = useState([]);
   const [lokasiData, setLokasiData] = useState([]);
   const [gradeData] = useState([
@@ -63,7 +64,7 @@ export default function AddItem({ navigation }) {
 
 
   useEffect(() => {
-    ProcessController.setData('item-list', "itemid", "itemname", setItemData, 1);
+    ProcessController.setData(`item-list?trsid=${trsid}`, "itemid", "itemname", setItemData, 1);
     ProcessController.setData('location-list', "locationid", "locationname", setLokasiData, 0);
     ProcessController.setData('color-list', "colorid", "colordesc", setWarnaData, 0);
   }, []);
@@ -175,7 +176,7 @@ export default function AddItem({ navigation }) {
               buttonStyle={styles.formPerhitunganButton}
               onButtonPressed={() => ProcessController.showCalculator(
                 [csoDetId, csoDet2Id],
-                [storedCredentials[0], storedCredentials[3]],
+                [storedCredentials[0], csoid],
                 [item, itemBatchId, lokasi, warna, 'R', grade, trsdetid],
                 [setCsoDetId, setCsoDet2Id, setModalVisible],
                 isModalVisible
@@ -210,7 +211,7 @@ export default function AddItem({ navigation }) {
           onButtonPressed={
             () => ProcessController.addItem(
               [csoDetId, csoDet2Id],
-              [storedCredentials[0], storedCredentials[3]],
+              [storedCredentials[0], csoid],
               [item, itemBatchId, lokasi, resultCalc, warna, keterangan, grade, trsdetid, tonaseQty],
               'R',
               navigation
@@ -222,6 +223,7 @@ export default function AddItem({ navigation }) {
           buttonStyle={styles.buttonDelete}
           additionalComponent={<Text style={styles.buttonAccountText}><Ionicons name="trash" size={20} color="white" />   Hapus</Text>}
         />
+        <Text style={styles.appVersionLabel}>Version {AppVersion}</Text>
       </View>
     </AvoidingWrapper>
   )

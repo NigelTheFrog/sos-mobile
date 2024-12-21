@@ -6,12 +6,13 @@ import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { styles } from '../../../../assets/styles/style';
 import AvoidingWrapper from '../../../../assets/styles/avoidingWrapper';
-import { CredentialContext, BaseURL } from '../../../../Credentials';
+import { CredentialContext, BaseURL, AppVersion } from '../../../../Credentials';
 import request from '../../../../request';
 import Dropdownitem from '../../../component/dropdownitem';
 
-export default function AddTemuanItem({navigation}) {
+export default function AddTemuanItem({route, navigation}) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
+  const { trsid, csoid } = route.params;
   const [lokasiData, setLokasiData] = useState([]);
   const [warnaData, setWarnaData] = useState([]);
   const [gradeData] = useState([
@@ -70,11 +71,13 @@ export default function AddTemuanItem({navigation}) {
       request.post('tambah-perhitungan-temuan', { 
         type: 1,
         username: storedCredentials[0],
-        csoid: storedCredentials[3],
+        csoid: csoid,
+        trsid: trsid,
         temuanname: item,
         lokasi: lokasi,
         color: warna,
-        statusItem: "T",
+        statusItem: "TR",
+        grade: grade
       }).then((responseData) => {
         if (responseData['result'] == 1) {
           setCsoDetId(responseData['csodetid']);
@@ -124,10 +127,13 @@ export default function AddTemuanItem({navigation}) {
       color: warna,
       remark: keterangan,
       username: storedCredentials[0],
-      csoid: storedCredentials[3],
+      trsid: trsid,
+      csoid: csoid,
       csodetid: csoDetId,
       csodet2id: csoDet2Id,
-      itemid: itemId
+      itemid: itemId,
+      statusItem: "TR",
+      grade: grade
     })
     .then((responseData) => {
       if (responseData['result'] == 1) {
@@ -513,7 +519,9 @@ export default function AddTemuanItem({navigation}) {
         <TouchableOpacity style={styles.buttonDelete}>
           <Text style={styles.buttonAccountText}><Ionicons name="trash" size={20} color="white" />   Hapus</Text>
         </TouchableOpacity>
+        <Text style={styles.appVersionLabel}>Version {AppVersion}</Text>
       </View>
+      
     </AvoidingWrapper>
   )
 }

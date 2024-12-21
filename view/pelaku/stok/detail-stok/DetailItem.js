@@ -12,7 +12,7 @@ import ProcessButton from '../../../component/processButton';
 import DetailController from '../../../../controller/DetailController';
 
 export default function DetailItem({ route, navigation }) {
-    const { csodetid, csodet2id, itemname, statusitem, statushslcso, color,
+    const { csodetid, csodet2id, itemname, statusitem, statushslcso, color, trsid, csoid,
         itemid, trsdet, itembatchid, qty, historylist, location, gradeid, remark,
         inputlist, statussubmit, tonase } = route.params;
     const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
@@ -54,11 +54,11 @@ export default function DetailItem({ route, navigation }) {
     const [tonaseQty, setTonaseQty] = useState(tonase);
     const [itemType, setItemType] = useState(statusitem);
     useEffect(() => {
-        ProcessController.setData('item-list', "itemid", "itemname", setItemData, 1);
+        ProcessController.setData(`item-list?trsid=${trsid}`, "itemid", "itemname", setItemData, 1);
         ProcessController.setData('location-list', "locationid", "locationname", setLokasiData, 0);
         ProcessController.setData('color-list', "colorid", "colordesc", setWarnaData, 0);
-
     }, []);
+
 
     return (
         <AvoidingWrapper>
@@ -210,7 +210,7 @@ export default function DetailItem({ route, navigation }) {
                         onButtonPressed={
                             () => DetailController.updateItem(
                                 [csoDetId, csoDet2Id],
-                                [storedCredentials[0], storedCredentials[3]],
+                                [storedCredentials[0], csoid],
                                 [item, itemBatch, lokasi, resultCalc, warna, keterangan, grade, trsdetid, tonaseQty],
                                 'R',
                                 navigation.navigate("HomeItem")
