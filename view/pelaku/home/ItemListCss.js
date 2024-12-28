@@ -103,12 +103,12 @@ export default function ItemListCss({ navigation }) {
             return (
                 <View style={styles.styledContainerMulaiCSO}>
                     <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-                        Silahkan memulai CSO terlebih dahulu
+                        Silahkan memulai CSS terlebih dahulu
                     </Text>
                     <ProcessButton
                         buttonStyle={styles.buttonMulaiCSO}
                         onButtonPressed={() => HomeController.startCSO('mulai-cso-item', storedCredentials, 'R', setStoredCredentials, 'CSS')}
-                        additionalComponent={<Text style={styles.buttonAccountText}>Mulai CSO</Text>}
+                        additionalComponent={<Text style={styles.buttonAccountText}>Mulai CSS</Text>}
                     />
                 </View>
             )

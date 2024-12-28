@@ -98,12 +98,12 @@ function filterStatus(status) {
       return (
         <View style={styles.styledContainerMulaiCSO}>
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-            Silahkan memulai CSO terlebih dahulu
+            Silahkan memulai CSS terlebih dahulu
           </Text>
           <ProcessButton
             buttonStyle={styles.buttonMulaiCSO}
             onButtonPressed={() => HomeController.startCSO('mulai-cso-avalan', storedCredentials, 'A', setStoredCredentials)}
-            additionalComponent={<Text style={styles.buttonAccountText}>Mulai CSO</Text>}
+            additionalComponent={<Text style={styles.buttonAccountText}>Mulai CSS</Text>}
           />
         </View>
       )

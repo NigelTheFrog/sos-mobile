@@ -52,7 +52,7 @@ export default function LoginScreen({ navigation }) {
     { value: 'http://pstpst.sos.sutindo.net:8056', label: 'PST PST' },
     { value: 'http://pstsby.sos.sutindo.net:8056', label: 'PST SBY' },  
     { value: 'http://pstsbyjkt.sos.sutindo.net:8056', label: 'PST SBY JKT' },      
-    { value: 'http://rra.sos.sutindo.net:8056', label: 'RRA' },
+    { value: 'http://rrasby.sos.sutindo.net:8056', label: 'RRA SBY' },
     { value: 'http://rrapg24.sos.sutindo.net:8056', label: 'RRA PEGIRIAN 24' },
     { value: 'http://rrapg38.sos.sutindo.net:8056', label: 'RRA PEGIRIAN 38' },
     { value: 'http://scickr.sos.sutindo.net:8056', label: 'SCI CKR' },
