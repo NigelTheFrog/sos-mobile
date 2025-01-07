@@ -10,11 +10,13 @@ import Dropdownitem from '../../../component/dropdownitem';
 import Multiselectitem from '../../../component/multiselectitem';
 import ProcessButton from '../../../component/processButton';
 import DetailController from '../../../../controller/DetailController';
+import Calculator from '../../../component/calculator';
+
 
 export default function DetailItem({ route, navigation }) {
     const { csodetid, csodet2id, itemname, statusitem, statushslcso, color, trsid, csoid,
         itemid, trsdet, itembatchid, qty, historylist, location, gradeid, remark,
-        inputlist, statussubmit, tonase } = route.params;
+        inputlist, statussubmit, tonase, qty_pengali, pengali } = route.params;
     const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
     const [itemData, setItemData] = useState([]);
     const [lokasiData, setLokasiData] = useState([]);
@@ -44,6 +46,9 @@ export default function DetailItem({ route, navigation }) {
     const [grade, setGrade] = useState(gradeid);
     const [history, setHistory] = useState(historylist);
     const [displayInput, setDisplayInput] = useState('');
+    const [boxQty, setBoxQty] = useState(qty_pengali);
+    const [isianBox, setIsianBox] = useState(pengali);
+    const [hasilPerkalian, setHasilPerkalian] = useState(qty_pengali && pengali ? (parseFloat(qty_pengali) * parseFloat(pengali).toString) : '');
     const [tempInput, setTempInput] = useState('');
     const [input, setInput] = useState(inputlist);
     const [isFocus, setIsFocus] = useState(false);
@@ -77,9 +82,16 @@ export default function DetailItem({ route, navigation }) {
                     setResultCalculation={setResultCalc}
                     temporaryInput={tempInput}
                     setTemporaryInput={setTempInput}
+                    boxQty={boxQty}
+                    setBoxQty={setBoxQty}
+                    isianBox={isianBox}
+                    setIsianBox={setIsianBox}
+                    hasilPerkalian={hasilPerkalian}
+                    setHasilPerkalian={setHasilPerkalian}                    
                     setter={() => ProcessController.submitPerhitungan(
                         csoDet2Id, tempInput, history, input,
-                        [setInput, setResultCalc, setHistory, setDisplayInput, setTempInput]
+                        [setInput, setResultCalc, setHistory, setDisplayInput, setTempInput, setHasilPerkalian],
+                        [boxQty, isianBox, hasilPerkalian]
                     )}
                 />
                 {itemType == 'R' && statushslcso == 'D' && statussubmit != "P" ?

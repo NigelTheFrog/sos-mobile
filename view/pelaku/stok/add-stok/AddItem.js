@@ -40,6 +40,9 @@ export default function AddItem({ route, navigation }) {
   const [grade, setGrade] = useState('');
   const [history, setHistory] = useState('');
   const [displayInput, setDisplayInput] = useState('');
+  const [boxQty, setBoxQty] = useState('');
+  const [isianBox, setIsianBox] = useState('');
+  const [hasilPerkalian, setHasilPerkalian] = useState('');
   const [tempInput, setTempInput] = useState('');
   const [input, setInput] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
@@ -85,9 +88,16 @@ export default function AddItem({ route, navigation }) {
           setResultCalculation={setResultCalc}
           temporaryInput={tempInput}
           setTemporaryInput={setTempInput}
+          boxQty={boxQty}
+          setBoxQty={setBoxQty}
+          isianBox={isianBox}
+          setIsianBox={setIsianBox}
+          hasilPerkalian={hasilPerkalian}
+          setHasilPerkalian={setHasilPerkalian}  
           setter={() => ProcessController.submitPerhitungan(
             csoDet2Id, tempInput, history, input,
-            [setInput, setResultCalc, setHistory, setDisplayInput, setTempInput]
+            [setInput, setResultCalc, setHistory, setDisplayInput, setTempInput, setHasilPerkalian],
+            [boxQty, isianBox, hasilPerkalian]
           )}
         />
         <Dropdownitem

@@ -3,8 +3,8 @@ import React from 'react'
 
 export default function AvoidingWrapper({children}) {
   return (
-    <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#ffffff'}}>
-        <ScrollView>
+    <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#ffffff', borderRadius: 20}}>
+        <ScrollView >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 {children}
             </TouchableWithoutFeedback>

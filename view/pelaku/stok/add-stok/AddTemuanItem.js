@@ -9,6 +9,8 @@ import AvoidingWrapper from '../../../../assets/styles/avoidingWrapper';
 import { CredentialContext, BaseURL, AppVersion } from '../../../../Credentials';
 import request from '../../../../request';
 import Dropdownitem from '../../../component/dropdownitem';
+import ProcessController from '../../../../controller/ProcessController';
+import Calculator from '../../../component/calculator';
 
 export default function AddTemuanItem({route, navigation}) {
   const { storedCredentials, setStoredCredentials } = useContext(CredentialContext);
@@ -38,6 +40,9 @@ export default function AddTemuanItem({route, navigation}) {
   const [history, setHistory] = useState('');
   const [displayInput, setDisplayInput] = useState('');
   const [tempInput, setTempInput] = useState('');
+  const [boxQty, setBoxQty] = useState('');
+  const [isianBox, setIsianBox] = useState('');
+  const [hasilPerkalian, setHasilPerkalian] = useState('');
   const [input, setInput] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -153,219 +158,33 @@ export default function AddTemuanItem({route, navigation}) {
   return (
     <AvoidingWrapper>
       <View style={styles.styledContainer}>
-        <Modal isVisible={isModalVisible}>
-          <View style={styles.modalView}>
-            <TouchableOpacity style={styles.modalButtonClose} onPress={() => setModalVisible(!isModalVisible)}>
-              <Ionicons name="close-outline" size={30} color="black" />
-            </TouchableOpacity>
-            <View style={styles.modalFormGroup}>
-              <View style={styles.modalFormGroupLabel}>
-                <Text>History</Text>
-              </View>
-              <TextInput
-                style={styles.modalFormGroupInput}
-                value={history}
-                editable={false}
-              />
-            </View>
-            <View style={styles.modalFormGroup}>
-              <View style={styles.modalFormGroupLabel}>
-                <Text>Input</Text>
-              </View>
-              <TextInput
-                style={styles.modalFormGroupInput}
-                value={displayInput}
-                editable={false}
-                keyboardType='default'
-              />
-            </View>
-            <View style={styles.modalFormGroup}>
-              <View style={styles.modalFormGroupLabel}>
-                <Text>Total</Text>
-              </View>
-              <TextInput
-                style={styles.modalFormGroupInput}
-                value={resultCalc}
-                editable={false}
-                keyboardType='default'
-              />
-            </View>
+      <Calculator
+          isVisible={isModalVisible}
+          closeModal={setModalVisible}
+          modalStyle={styles.modalView}
+          input={input}
+          setInput={setInput}
+          history={history}
+          setHistory={setHistory}
+          displayInput={displayInput}
+          setDisplayInput={setDisplayInput}
+          resultCalculation={resultCalc}
+          setResultCalculation={setResultCalc}
+          temporaryInput={tempInput}
+          setTemporaryInput={setTempInput}
+          boxQty={boxQty}
+          setBoxQty={setBoxQty}
+          isianBox={isianBox}
+          setIsianBox={setIsianBox}
+          hasilPerkalian={hasilPerkalian}
+          setHasilPerkalian={setHasilPerkalian}  
+          setter={() => ProcessController.submitPerhitungan(
+            csoDet2Id, tempInput, history, input,
+            [setInput, setResultCalc, setHistory, setDisplayInput, setTempInput, setHasilPerkalian],
+            [boxQty, isianBox, hasilPerkalian]
+          )}
+        />
 
-            <View style={styles.styledContainer}>
-              <View style={styles.modalCalculator}>
-                <TouchableOpacity style={styles.modalCalculatorButtonOperand}
-                  onPress={() => {
-                    setInput([]);
-                    setDisplayInput('');
-                    setTempInput('');
-                    setHistory('');
-                    setResultCalc('');
-                  }}>
-                  <Text style={styles.buttonAccountText}>C</Text>
-                </TouchableOpacity>
-                <TouchableOpacity disabled={ history == '' ? true : false} style={styles.modalCalculatorButtonOperand} onPress={() => {
-                  if (tempInput != '') {
-                    const dataTempInputLength = tempInput.length;
-                    setDisplayInput(displayInput.slice(0, -(dataTempInputLength + 1)));
-                    setHistory(displayInput.slice(0, -(dataTempInputLength + 1)));
-                  } else {
-                    const getLastData = input[input.length - 1].length;
-                    setDisplayInput(displayInput.slice(0, -(getLastData + 2)));
-                    if (resultCalc == "") {
-                      setHistory(history.slice(0, -(getLastData + 2)));
-                    } else {
-                      const resultLength = resultCalc.length;
-                      setHistory(history.slice(0, -(getLastData + 2 + resultLength)));
-                    }
-                  }
-                  const newInputData = [...input];
-                  newInputData.pop();
-                  setInput(newInputData);
-                  setTempInput('');
-                }} >
-                  <Ionicons name="backspace" size={20} color="white" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalCalculatorButtonOperand} onPress={() => {
-                  const lastHistoryChar = history.slice(-1);
-
-                  if (!lastHistoryChar.includes('+') && history != '') {
-                    setHistory(`${history}+`);
-                    if (displayInput != '') {
-                      setDisplayInput(`${displayInput}+`);
-                    }
-                  }
-                  if (tempInput != '') {
-                    setInput([...input, tempInput]);
-                    setTempInput('');
-                  }
-                }}>
-                  <Ionicons name="add" size={20} color="white" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.modalCalculator}>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}7`);
-                    setHistory(`${history}7`);
-                    setTempInput(`${tempInput}7`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>7</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}8`);
-                    setHistory(`${history}8`);
-                    setTempInput(`${tempInput}8`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>8</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}9`);
-                    setHistory(`${history}9`);
-                    setTempInput(`${tempInput}9`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>9</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.modalCalculator}>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}4`);
-                    setHistory(`${history}4`);
-                    setTempInput(`${tempInput}4`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>4</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}5`);
-                    setHistory(`${history}5`);
-                    setTempInput(`${tempInput}5`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>5</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}6`);
-                    setHistory(`${history}6`);
-                    setTempInput(`${tempInput}6`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>6</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.modalCalculator}>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}1`);
-                    setHistory(`${history}1`);
-                    setTempInput(`${tempInput}1`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}2`);
-                    setHistory(`${history}2`);
-                    setTempInput(`${tempInput}2`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>2</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}3`);
-                    setHistory(`${history}3`);
-                    setTempInput(`${tempInput}3`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>3</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.modalCalculator}>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber}
-                  onPress={() => {
-                    setDisplayInput(`${displayInput}0`);
-                    setHistory(`${history}0`);
-                    setTempInput(`${tempInput}0`);
-                  }}>
-                  <Text style={styles.buttonAccountText}>0</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalCalculatorButtonNumber} onPress={() => {
-                  //   console.log(input);
-                  // const newInputData = [...input];
-                  //   newInputData.pop();
-                  //   console.log(newInputData)
-                }}>
-                  <Text style={styles.buttonAccountText}>.</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.modalCalculatorButtonSimpan} onPress={() => {
-                  if (history != '') {
-                    let tempCalculation = 0;
-                    let tempDataInput = [...input];
-                    if (tempInput != '') {
-                      tempDataInput.push(tempInput);
-                      for (var i = 0; i < input.length; i++) {
-                        tempCalculation += parseInt(input[i]);
-                      }
-                      tempCalculation += parseInt(tempInput);
-                    } else {
-                      for (var i = 0; i < input.length; i++) {
-                        tempCalculation += parseInt(input[i]);
-                      }
-                    }
-                    submitPerhitungan(tempCalculation.toString(), tempDataInput);
-                  } else {
-                    Alert.alert('Perhitungan Gagal', 'Pastikan Anda sudah menekan salah satu angka pada kalkulator terlebih dahulu', [
-                      { text: 'OK' },
-                    ]);
-                  }
-
-                }}>
-                  <Text style={styles.buttonAccountText}>=</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
         <View style={styles.formGroup}>
           <View style={styles.formGroupLabel}>
             <Text>Item</Text>

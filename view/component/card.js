@@ -37,7 +37,9 @@ export default Card = ({
                             gradeid: Number.parseInt(item.grade),
                             trsid: trsid,
                             trsdet: item.trsdetid,
-                            tonase: coy == 'KKS' ? item.tonase : null
+                            tonase: coy == 'KKS' ? item.tonase : null,
+                            qty_pengali: item.qty_pengali, 
+                            pengali: item.pengali
                         })}
                         additionalComponent={
                             userType == 0 ?

@@ -393,7 +393,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         width: 90,
         flex: 1
-    },
+    },    
     modalFormGroupInput: {
         backgroundColor: Colors.primary,
         justifyContent: 'center',
@@ -401,6 +401,44 @@ export const styles = StyleSheet.create({
         width: '75%',
         paddingLeft: 15,
         color: Colors.brand
+    },
+    modalFormGroupPengali: {
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderColor: Colors.grey,
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5,
+        marginTop: 10,
+        // marginRight: 5,
+        height: 35,
+        width: '49.5%'
+    },
+    modalFormGroupPengaliLabel: {
+        backgroundColor: Colors.lightGrey,
+        borderRightWidth: 1,
+        borderRightColor: Colors.grey,
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '30%'
+    },
+    modalFormGroupPengaliInput: {
+        backgroundColor: Colors.primary,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '70%',
+        paddingLeft: 5,
+        color: Colors.brand
+    },
+    modalFormPengaliButton: {
+        width: 80,
+        backgroundColor: Colors.blue,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5, 
+        marginTop: 10,
+        height: 35
     },
     pageTitle: {
         fontSize: 24,

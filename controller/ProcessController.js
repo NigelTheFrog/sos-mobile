@@ -77,10 +77,12 @@ class ProcessController {
         }
     }
 
-    submitPerhitungan(csoDet2Id, tempInput, history, input, setter) {
+    submitPerhitungan(csoDet2Id, tempInput, history, input, setter, perkalian) {
         if (history != '') {
             let tempCalculation = 0;
+            let pengali = '';
             let tempDataInput = [...input];
+            let tempHistory = history;
             if (tempInput != '') {
                 tempDataInput.push(tempInput);
                 for (var i = 0; i < input.length; i++) {
@@ -92,19 +94,31 @@ class ProcessController {
                     tempCalculation += parseFloat(input[i]);
                 }
             }
+            if(perkalian[2] != '') tempHistory.slice(0, -(perkalian[2].length + 1));
+
+            if(perkalian[0] != '' && perkalian[1] != '' ) {                
+                setter[5]((parseFloat(perkalian[0]) * parseFloat(perkalian[1])).toString());
+                pengali = `+${parseFloat(perkalian[0]) * parseFloat(perkalian[1])}`;
+                tempCalculation += (parseFloat(perkalian[0]) * parseFloat(perkalian[1]));
+            } else {
+                setter[5]('');
+                pengali = '';
+            }
 
             request.post('simpan-perhitungan', {
                 csodet2id: csoDet2Id,
                 qty: tempCalculation.toString(),
-                history: history,
+                history: `${tempHistory}${pengali}=${tempCalculation.toString()}`,
                 inputs: tempDataInput.join(','),
-                operand: input[0]
+                operand: input[0],
+                pengali: perkalian[0],
+                qty_pengali: perkalian[1]
             })
                 .then((responseData) => {
                     if (responseData['result'] == 1) {
                         setter[0](tempDataInput);
                         setter[1](tempCalculation.toString());
-                        setter[2](`${history}=${tempCalculation.toString()}`);
+                        setter[2](`${tempHistory}${pengali}=${tempCalculation.toString()}`);
                         setter[3]('');
                         setter[4]('');
 
