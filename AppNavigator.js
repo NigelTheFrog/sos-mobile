@@ -20,6 +20,8 @@ import WarningVersion from './view/account/WarningVersion';
 import Setting from './Setting';
 import request from './request';
 import { useState } from 'react';
+import HomeScreenApproval from './view/approval/HomeScreenApproval';
+import DetailDocument from './view/approval/detail/DetailDocument';
 
 
 const Stack = createNativeStackNavigator();
@@ -62,8 +64,21 @@ export default function AppNavigator() {
                                             <Ionicons name="settings-sharp" size={30} color="white" />
                                         </Component.TouchableOpacity>
                                     ),
-                                })} /> :
+                                })} /> : storedCredentials[2] == 4 ?
                                 <Stack.Screen name='HomeItem' component={HomeScreenPelaku} options={({ navigation }) => ({
+                                    headerTitle: "Home",
+                                    headerBackVisible: false,
+                                    headerRight: () => (
+                                        <Component.TouchableOpacity
+                                            style={styles.buttonLogout}
+                                            onPress={() => navigation.navigate('Setting')}
+                                        >
+                                            <Ionicons name="settings-sharp" size={30} color="white" />
+                                        </Component.TouchableOpacity>
+                                    ),
+                                })}
+                                /> : 
+                                <Stack.Screen name='HomeApproval' component={HomeScreenApproval} options={({ navigation }) => ({
                                     headerTitle: "Home",
                                     headerBackVisible: false,
                                     headerRight: () => (
@@ -103,7 +118,7 @@ export default function AppNavigator() {
                         <Stack.Screen name='DetailAvalan' component={DetailAvalan} options={{ headerTitle: "Detail Avalan", }} />
                         <Stack.Screen name='DetailItemAnalisator' component={DetailItemAnalisator} options={{ headerTitle: "Detail Item", }} />
                         <Stack.Screen name='DetailAvalanAnalisator' component={DetailAvalanAnalisator} options={{ headerTitle: "Detail Avalan", }} />
-
+                        <Stack.Screen name='DetailDocument' component={DetailDocument} options={{ headerTitle: "Detail Document", }} />
                     </Stack.Navigator>
                 </NavigationContainer>
             )}
