@@ -25,7 +25,7 @@ export default function DetailItem({ route, navigation }) {
         {
             value: 1,
             label: 'Grade 1',
-            
+
         },
         {
             value: 2,
@@ -46,8 +46,8 @@ export default function DetailItem({ route, navigation }) {
     const [grade, setGrade] = useState(gradeid);
     const [history, setHistory] = useState(historylist);
     const [displayInput, setDisplayInput] = useState('');
-    const [boxQty, setBoxQty] = useState(qty_pengali);
-    const [isianBox, setIsianBox] = useState(pengali);
+    const [boxQty, setBoxQty] = useState(qty_pengali ? qty_pengali : '');
+    const [isianBox, setIsianBox] = useState(pengali ? pengali : '');
     const [hasilPerkalian, setHasilPerkalian] = useState(qty_pengali && pengali ? (parseFloat(qty_pengali) * parseFloat(pengali).toString) : '');
     const [tempInput, setTempInput] = useState('');
     const [input, setInput] = useState(inputlist);
@@ -87,7 +87,7 @@ export default function DetailItem({ route, navigation }) {
                     isianBox={isianBox}
                     setIsianBox={setIsianBox}
                     hasilPerkalian={hasilPerkalian}
-                    setHasilPerkalian={setHasilPerkalian}                    
+                    setHasilPerkalian={setHasilPerkalian}
                     setter={() => ProcessController.submitPerhitungan(
                         csoDet2Id, tempInput, history, input,
                         [setInput, setResultCalc, setHistory, setDisplayInput, setTempInput, setHasilPerkalian],
